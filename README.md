@@ -158,14 +158,44 @@ npm run dev
 
 ## Environment Variables
 
-Use:
+Use these templates as your source of truth:
 
 - `frontend/.env.example`
 - `backend/.env.example`
 
-as the source of truth for required variables.
+### Quick start
 
-Do **not** commit real `.env` files.
+```bash
+# frontend
+cd frontend
+cp .env.example .env
+
+# backend
+cd ../backend
+cp .env.example .env
+```
+
+### Frontend variables
+
+- `VITE_API_URL` (required): backend origin, e.g. `http://localhost:5000`
+- `VITE_PUBLIC_APP_URL` (optional): public app origin used for share links
+
+### Backend variables
+
+- **Required**
+  - `MONGO_URI`: MongoDB connection string
+  - `JWT_SECRET`: strong random secret for JWT signing
+- **Recommended**
+  - `FRONTEND_URL` / `CLIENT_URL` / `APP_PUBLIC_URL`: frontend/public origin used in email/action links
+  - `CORS_ALLOWED_ORIGINS`: allowed frontend origins
+  - `EMAIL_FROM`: sender identity for emails
+- **Optional**
+  - SMTP config: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_SECURE`
+  - Tuning: `BOOKING_PENDING_HOLD_MINUTES`, `SLOT_HOLD_MINUTES`
+  - Geocoder identity: `GEOCODER_USER_AGENT`
+  - Rate limit keys shown in `backend/.env.example`
+
+Do **not** commit real `.env` files (only `.env.example`).
 
 ## Status
 
