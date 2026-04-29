@@ -1,0 +1,80 @@
+.scroll-to-top {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  z-index: 999;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: #4F46E5;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 4px 20px rgba(0, 86, 179, 0.4),
+    0 0 0 0 rgba(0, 86, 179, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.5) translateY(20px);
+  transition:
+    opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    visibility 0.4s,
+    box-shadow 0.3s ease;
+}
+
+.scroll-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1) translateY(0);
+  animation: scrollToTopFloat 3s ease-in-out infinite;
+}
+
+@keyframes scrollToTopFloat {
+  0%,
+  100% {
+    transform: scale(1) translateY(0);
+  }
+  50% {
+    transform: scale(1) translateY(-4px);
+  }
+}
+
+.scroll-to-top:hover {
+  animation: none;
+  transform: scale(1.08) translateY(-2px);
+  box-shadow:
+    0 8px 28px rgba(0, 86, 179, 0.5),
+    0 0 0 8px rgba(0, 86, 179, 0.15);
+}
+
+.scroll-to-top:active {
+  transform: scale(0.96) translateY(0);
+}
+
+.scroll-to-top__arrow {
+  width: 22px;
+  height: 22px;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.scroll-to-top:hover .scroll-to-top__arrow {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .scroll-to-top {
+    bottom: 24px;
+    right: 24px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .scroll-to-top__arrow {
+    width: 18px;
+    height: 18px;
+  }
+}

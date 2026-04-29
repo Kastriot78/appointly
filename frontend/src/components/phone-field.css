@@ -1,0 +1,163 @@
+.phone-field-wrap {
+  width: 100%;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 12px 16px;
+}
+
+.phone-field-wrap .PhoneInput {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  width: 100%;
+}
+
+.phone-field-wrap .PhoneInputCountry {
+  margin: 0;
+}
+
+.phone-field-wrap .PhoneInputCountryIcon {
+  box-shadow: none;
+}
+
+.phone-field-wrap .PhoneInputCountrySelect {
+  padding: 0 8px 0 10px;
+  border-radius: 12px;
+  border: 1.5px solid #e2e8f0;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  color: #475569;
+  min-height: 46px;
+}
+
+.phone-field-wrap .PhoneInputCountrySelect:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.08);
+  outline: none;
+}
+
+.phone-field-wrap .PhoneInputInput {
+  flex: 1;
+  min-width: 0;
+  font-size: 15px;
+  color: #1e293b;
+  border: 1.5px solid #e2e8f0;
+  background-color: transparent;
+  outline: none;
+  border: 0;
+  padding: 0;
+  transition: all 0.25s ease;
+}
+
+.phone-field-wrap .PhoneInputInput:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.phone-field-wrap .PhoneInputInput:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  background: #f8fafc;
+}
+
+/* Dashboard business edit — match .be-field inputs */
+.be-field .phone-field-wrap .PhoneInputCountrySelect,
+.be-field .phone-field-wrap .PhoneInputInput {
+  font-family: "Sora", sans-serif;
+}
+
+/* Profile / staff modal — same single border as .dp-field text inputs */
+.dp-field .phone-field-wrap,
+.dt-modal .dp-field .phone-field-wrap {
+  border: 1.5px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 12px 16px;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.dp-field.focused .phone-field-wrap,
+.dp-field .phone-field-wrap:focus-within {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.08);
+}
+
+.dt-modal .dp-field .phone-field-wrap:focus-within {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.08);
+}
+
+.dp-field .phone-field-wrap .PhoneInputCountrySelect,
+.dt-modal .dp-field .phone-field-wrap .PhoneInputCountrySelect {
+  border: none;
+  background: transparent;
+  min-height: auto;
+  padding-left: 0;
+  box-shadow: none;
+}
+
+.dp-field .phone-field-wrap .PhoneInputCountrySelect:focus,
+.dt-modal .dp-field .phone-field-wrap .PhoneInputCountrySelect:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Onboarding staff row: fill the mini-field */
+.ob-mini-field .phone-field-wrap {
+  border: none;
+  padding: 0;
+  flex: 1;
+  min-width: 0;
+}
+
+/* ---------- Dark mode — one surface for flag + code + input (match .dp-field inputs) ---------- */
+[data-theme="dark"] .phone-field-wrap {
+  background-color: var(--app-surface-2);
+  border-color: var(--app-border);
+  /* react-phone-number-input flag / arrow tokens */
+  --PhoneInputCountryFlag-borderColor: rgba(255, 255, 255, 0.22);
+  --PhoneInputCountrySelectArrow-color: var(--app-text-muted);
+}
+
+[data-theme="dark"] .phone-field-wrap .PhoneInputInput {
+  background-color: transparent !important;
+  color: var(--app-text-heading);
+  /* Global theme rule adds a filled input look; we want a single bar with the wrapper */
+  box-shadow: none !important;
+}
+
+[data-theme="dark"] .phone-field-wrap .PhoneInputInput::placeholder {
+  color: var(--app-text-muted);
+}
+
+[data-theme="dark"] .phone-field-wrap .PhoneInputInput:disabled {
+  background: transparent !important;
+  opacity: 0.55;
+}
+
+[data-theme="dark"] .phone-field-wrap .PhoneInputCountrySelect:focus + .PhoneInputCountryIcon--border {
+  box-shadow:
+    0 0 0 1px var(--app-primary),
+    inset 0 0 0 1px var(--app-primary);
+}
+
+[data-theme="dark"] .dp-field.focused .phone-field-wrap,
+[data-theme="dark"] .dp-field .phone-field-wrap:focus-within,
+[data-theme="dark"] .dt-modal .dp-field .phone-field-wrap:focus-within {
+  border-color: var(--app-primary);
+  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.25);
+}
+
+/* Business edit / generic phone wrap (no .dp-field): same unified surface */
+[data-theme="dark"] .be-field .phone-field-wrap {
+  background-color: var(--app-surface-2);
+  border-color: var(--app-border);
+}
+
+[data-theme="dark"] .be-field .phone-field-wrap .PhoneInputInput {
+  background-color: transparent !important;
+  color: var(--app-text-heading);
+  box-shadow: none !important;
+}

@@ -1,0 +1,44 @@
+/* Polished tooltips — use <AppTooltip> instead of native `title` */
+
+.app-tooltip {
+  --bs-tooltip-bg: rgba(255, 255, 255, 0.96);
+  --bs-tooltip-color: #475569;
+  --bs-tooltip-padding-x: 12px;
+  --bs-tooltip-padding-y: 8px;
+  --bs-tooltip-border-radius: 10px;
+  --bs-tooltip-font-size: 12px;
+  --bs-tooltip-max-width: min(280px, calc(100vw - 24px));
+  z-index: 1080;
+}
+
+.app-tooltip .tooltip-inner {
+  font-family: var(--font-sans, "Poppins", system-ui, sans-serif);
+  font-weight: 500;
+  line-height: 1.45;
+  text-align: center;
+  box-shadow:
+    0 4px 24px rgba(15, 23, 42, 0.1),
+    0 0 0 1px rgba(226, 232, 240, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.app-tooltip-target--disabled {
+  display: inline-flex;
+  align-items: center;
+  justify-content: inherit;
+  max-width: 100%;
+  cursor: not-allowed;
+}
+
+/* Booking modal time grid: wrapper should span the cell */
+.bm-times-grid > .app-tooltip-target--disabled {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+}
+
+.bm-times-grid > .app-tooltip-target--disabled .bm-time-slot {
+  flex: 1;
+  min-width: 0;
+}

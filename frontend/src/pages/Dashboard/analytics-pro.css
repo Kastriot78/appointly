@@ -1,0 +1,410 @@
+/* ========================================================================== */
+/*  Advanced Analytics — sits on top of dashboard-pages.css so only NEW styles */
+/*  live here. Uses the shared --app-* tokens so dark mode comes for free.     */
+/* ========================================================================== */
+
+.dt-analytics .dp-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.dt-analytics .ana-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ana-range-toggle {
+  flex-wrap: wrap;
+}
+
+.ana-refresh-btn {
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 1px solid var(--app-border);
+  background: var(--app-surface);
+  color: var(--app-text);
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s;
+}
+.ana-refresh-btn:hover:not([disabled]) {
+  background: var(--app-primary-soft);
+  color: var(--app-primary);
+  border-color: var(--app-primary);
+}
+.ana-refresh-btn[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.ana-refresh-btn .spin {
+  animation: ana-spin 0.9s linear infinite;
+}
+@keyframes ana-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.dt-analytics-card.ana-card-full {
+  grid-column: 1 / -1;
+}
+/* Parent layout relies on existing dt-analytics-grid; the card uses surface
+   tokens so the background swaps cleanly between themes. */
+.dt-analytics-card {
+  background: var(--app-surface);
+  border-color: var(--app-border);
+}
+
+/* Give every block on the Analytics page breathing room — the page stacks
+   top-level children as plain block elements, so add top margin to each
+   section that follows the KPI grid or a prior card. */
+.dt-analytics .dp-stats-grid,
+.dt-analytics .dt-analytics-grid {
+  margin-top: 24px;
+}
+.dt-analytics > .dt-analytics-card,
+.dt-analytics > .dt-analytics-grid + .dt-analytics-card,
+.dt-analytics .dt-analytics-card + .dt-analytics-card {
+  margin-top: 24px;
+}
+.dt-analytics-card h3 {
+  color: var(--app-text-heading);
+}
+
+.ana-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.ana-card-header h3 {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+.ana-card-sub {
+  font-size: 12px;
+  color: var(--app-text-muted);
+  font-weight: 500;
+}
+
+.ana-chart-wrap {
+  width: 100%;
+  min-height: 240px;
+}
+.ana-chart-wrap--short {
+  min-height: 200px;
+}
+
+.ana-empty {
+  padding: 48px 16px;
+  text-align: center;
+  color: var(--app-text-muted);
+  font-size: 14px;
+}
+.ana-empty--column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Staff utilization                                                          */
+/* -------------------------------------------------------------------------- */
+.ana-util-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.ana-util-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ana-util-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.ana-util-name-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.ana-util-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  object-fit: cover;
+  background: var(--app-surface-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--app-primary);
+  font-size: 14px;
+}
+.ana-util-avatar--ph {
+  background: var(--app-primary-soft);
+}
+.ana-util-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--app-text-heading);
+}
+.ana-util-meta {
+  font-size: 12px;
+  color: var(--app-text-muted);
+}
+.ana-util-pct {
+  font-family: "Sora", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--app-primary);
+  white-space: nowrap;
+}
+.ana-util-bar-bg {
+  width: 100%;
+  height: 8px;
+  background: var(--app-surface-3);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.ana-util-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #4f46e5, #818cf8);
+  border-radius: 4px;
+  transition: width 0.45s ease;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Heatmap                                                                    */
+/* -------------------------------------------------------------------------- */
+.ana-heatmap-wrap {
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.ana-heatmap-hours,
+.ana-heatmap-row {
+  display: grid;
+  grid-template-columns: 56px repeat(24, minmax(18px, 1fr));
+  gap: 3px;
+}
+.ana-heatmap-hours {
+  margin-bottom: 4px;
+}
+.ana-heatmap-corner {
+  height: 16px;
+}
+.ana-heatmap-hour-label {
+  font-size: 10px;
+  color: var(--app-text-muted);
+  text-align: center;
+  font-weight: 500;
+}
+.ana-heatmap-row {
+  margin-top: 3px;
+  align-items: center;
+}
+.ana-heatmap-day {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--app-text);
+}
+.ana-heatmap-cell {
+  height: 22px;
+  border-radius: 4px;
+  background: var(--app-surface-3);
+  transition: transform 0.12s ease;
+  cursor: default;
+}
+.ana-heatmap-cell:hover {
+  transform: scale(1.15);
+  outline: 1px solid var(--app-primary);
+}
+.ana-heatmap-legend {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--app-text-muted);
+}
+.ana-heatmap-legend-cell {
+  width: 18px;
+  height: 14px;
+  border-radius: 3px;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Cohort table                                                               */
+/* -------------------------------------------------------------------------- */
+.ana-cohort-wrap {
+  overflow-x: auto;
+}
+.ana-cohort-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 4px;
+  font-size: 13px;
+  min-width: 560px;
+}
+.ana-cohort-table th {
+  font-size: 11px;
+  color: var(--app-text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 6px 8px;
+  text-align: center;
+}
+.ana-cohort-th-cohort,
+.ana-cohort-th-size {
+  text-align: left !important;
+}
+.ana-cohort-label {
+  font-weight: 600;
+  color: var(--app-text-heading);
+  padding: 10px 8px;
+  white-space: nowrap;
+}
+.ana-cohort-size {
+  color: var(--app-text-muted);
+  font-weight: 500;
+  padding: 10px 8px;
+}
+.ana-cohort-cell {
+  text-align: center;
+  padding: 10px 6px;
+  border-radius: 6px;
+  font-weight: 600;
+  min-width: 56px;
+  transition: background 0.2s;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Skeleton                                                                   */
+/* -------------------------------------------------------------------------- */
+.ana-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--app-surface-2) 0%,
+    var(--app-surface-3) 50%,
+    var(--app-surface-2) 100%
+  );
+  background-size: 200% 100%;
+  animation: ana-shimmer 1.5s linear infinite;
+  border-radius: 10px;
+}
+.ana-skeleton--stat {
+  width: 100%;
+  height: 56px;
+}
+@keyframes ana-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Dark mode touch-ups — charts + cards                                       */
+/* -------------------------------------------------------------------------- */
+[data-theme="dark"] .dt-analytics-card {
+  background: var(--app-surface);
+  border-color: var(--app-border);
+  color: var(--app-text);
+}
+[data-theme="dark"] .dt-period-toggle {
+  background: var(--app-surface-2);
+}
+[data-theme="dark"] .dt-period-btn {
+  color: var(--app-text-muted);
+}
+[data-theme="dark"] .dt-period-btn.active {
+  background: var(--app-surface);
+  color: var(--app-primary);
+  box-shadow: var(--app-shadow-sm);
+}
+[data-theme="dark"] .dt-change.up {
+  color: #34d399;
+}
+[data-theme="dark"] .ana-util-bar {
+  background: linear-gradient(90deg, #6366f1, #a5b4fc);
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Responsive                                                                 */
+/* -------------------------------------------------------------------------- */
+@media (max-width: 720px) {
+  .dt-analytics .dp-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .dt-analytics .ana-controls {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .ana-range-toggle {
+    width: 100%;
+  }
+  .ana-heatmap-hours,
+  .ana-heatmap-row {
+    grid-template-columns: 44px repeat(24, minmax(14px, 1fr));
+  }
+  .ana-heatmap-cell {
+    height: 16px;
+  }
+}
+
+@media (max-width: 560px) {
+  .ana-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .ana-card-sub {
+    line-height: 1.4;
+    max-width: 100%;
+  }
+  .ana-util-head {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    row-gap: 6px;
+  }
+  .ana-util-name-wrap {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+  .ana-util-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: min(220px, 70vw);
+  }
+  .ana-util-pct {
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+  .dt-analytics-card {
+    padding: 16px;
+  }
+}

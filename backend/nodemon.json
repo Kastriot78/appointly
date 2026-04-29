@@ -1,0 +1,6 @@
+{
+  "watch": ["server.js", "src", ".env"],
+  "ext": "js,json",
+  "ignore": ["node_modules", "src/**/*.test.js"],
+  "delay": "300ms"
+}

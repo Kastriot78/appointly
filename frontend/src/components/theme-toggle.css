@@ -1,0 +1,104 @@
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center !important;
+  gap: 8px;
+  border: 1px solid var(--app-border, #e5e4e7) !important;
+  background: var(--app-surface, #fff) !important;
+  color: var(--app-text-heading, #1e293b) !important;
+  border-radius: 999px !important;
+  cursor: pointer !important;
+  padding: 8px !important;
+  width: 36px !important;
+  height: 36px !important;
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.12s ease;
+}
+
+.theme-toggle:hover {
+  background: var(--app-surface-2, #f8fafc);
+  color: var(--app-primary, #4f46e5);
+  border-color: var(--app-border-strong, #cbd5e1);
+}
+
+[data-theme="dark"] .theme-toggle {
+  background: var(--app-surface-2);
+  color: var(--app-text-heading);
+  border-color: var(--app-border-strong);
+}
+[data-theme="dark"] .theme-toggle:hover {
+  background: var(--app-primary-soft);
+  color: var(--app-primary);
+  border-color: var(--app-primary);
+}
+[data-theme="dark"] .theme-toggle--ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--app-text-muted);
+}
+[data-theme="dark"] .theme-toggle--ghost:hover {
+  background: var(--app-surface-2);
+  color: var(--app-text-heading);
+  border-color: transparent;
+}
+[data-theme="dark"] .theme-toggle--menu {
+  background: transparent;
+  color: var(--app-text);
+  border-color: transparent;
+}
+[data-theme="dark"] .theme-toggle--menu:hover {
+  background: var(--app-surface-2);
+  color: var(--app-text-heading);
+}
+
+.theme-toggle:active {
+  transform: translateY(1px);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--app-primary, #4f46e5);
+  outline-offset: 2px;
+}
+
+.theme-toggle__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-toggle--ghost {
+  border: none;
+  background: transparent;
+  color: var(--app-text-muted, #64748b);
+  width: 36px;
+  height: 36px;
+}
+.theme-toggle--ghost:hover {
+  background: var(--app-surface-2, #f1f5f9);
+  color: var(--app-text-heading, #1e293b);
+  border-color: transparent;
+}
+
+.theme-toggle--menu {
+  width: 100%;
+  height: auto;
+  padding: 10px 14px;
+  border-radius: 8px;
+  justify-content: flex-start;
+  font-size: 14px;
+  font-weight: 500;
+  background: transparent;
+  color: var(--app-text, #475569);
+  border-color: transparent;
+}
+.theme-toggle--menu:hover {
+  background: var(--app-surface-2, #f8fafc);
+  color: var(--app-text-heading, #1e293b);
+  border-color: transparent;
+}
+.theme-toggle--menu .theme-toggle__label {
+  font-family: inherit;
+}
