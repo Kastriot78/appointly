@@ -36,6 +36,8 @@ function getTransporter() {
     port: Number(process.env.SMTP_PORT || process.env.EMAIL_PORT || 587),
     secure:
       process.env.SMTP_SECURE === "true" || process.env.EMAIL_SECURE === "true",
+    // Render/Gmail can fail on IPv6 routes; force IPv4 SMTP resolution.
+    family: 4,
     auth: user && pass ? { user, pass } : undefined,
   });
 }
@@ -53,7 +55,9 @@ function buildAppointlyCustomerNoticeHtml(p) {
     `<p style="margin:0;color:#64748b;">(No message body)</p>`;
 
   const lines = Array.isArray(p.appointmentDetailLines)
-    ? p.appointmentDetailLines.map((x) => String(x || "").trim()).filter(Boolean)
+    ? p.appointmentDetailLines
+        .map((x) => String(x || "").trim())
+        .filter(Boolean)
     : [];
   let detailSection = "";
   if (lines.length > 0) {
@@ -69,7 +73,9 @@ function buildAppointlyCustomerNoticeHtml(p) {
   }
 
   const manageUrl = p.manageUrl ? String(p.manageUrl).trim() : "";
-  const ctaBlock = manageUrl ? buildGradientCtaHtml(manageUrl, "View your bookings") : "";
+  const ctaBlock = manageUrl
+    ? buildGradientCtaHtml(manageUrl, "View your bookings")
+    : "";
 
   const contentHtml = `
     <p style="color:#475569;margin:0 0 12px 0;font-size:15px;">Hi ${name},</p>
@@ -135,7 +141,9 @@ async function sendTenantCustomerBookingNotices(p) {
   let skippedNoEmail = 0;
 
   for (const r of list) {
-    const to = String(r.email || "").trim().toLowerCase();
+    const to = String(r.email || "")
+      .trim()
+      .toLowerCase();
     if (!to || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) {
       skippedNoEmail += 1;
       continue;
@@ -299,7 +307,9 @@ async function sendBookingConfirmedCustomerEmail(p) {
 
   const transporter = getTransporter();
   if (!transporter) {
-    console.warn(`[booking-email] SMTP not configured — customer confirmation not sent to ${p.to}`);
+    console.warn(
+      `[booking-email] SMTP not configured — customer confirmation not sent to ${p.to}`,
+    );
     return { delivered: false, reason: "smtp_not_configured" };
   }
   try {
@@ -384,7 +394,9 @@ async function sendBookingConfirmedBusinessEmail(p) {
 
   const transporter = getTransporter();
   if (!transporter) {
-    console.warn(`[booking-email] SMTP not configured — business notification not sent to ${p.to}`);
+    console.warn(
+      `[booking-email] SMTP not configured — business notification not sent to ${p.to}`,
+    );
     return { delivered: false, reason: "smtp_not_configured" };
   }
   try {
@@ -730,7 +742,11 @@ async function sendClosingPeriodEmailsToCustomers(p) {
     console.warn(
       `[closing-email] SMTP not configured — ${recipients.length} closing notice(s) not sent`,
     );
-    return { delivered: 0, skipped: recipients.length, reason: "smtp_not_configured" };
+    return {
+      delivered: 0,
+      skipped: recipients.length,
+      reason: "smtp_not_configured",
+    };
   }
 
   let delivered = 0;
@@ -918,7 +934,9 @@ async function sendCouponOfferEmail({
 
   const transporter = getTransporter();
   if (!transporter) {
-    console.warn(`[coupon-email] SMTP not configured — coupon ${code} for ${to} not sent`);
+    console.warn(
+      `[coupon-email] SMTP not configured — coupon ${code} for ${to} not sent`,
+    );
     return { delivered: false, reason: "smtp_not_configured" };
   }
 
@@ -1104,10 +1122,7 @@ async function sendAppointmentReminderEmail(p) {
     await transporter.sendMail({ from, to: p.to, subject, text, html });
     return { delivered: true };
   } catch (err) {
-    console.error(
-      `[reminder-email] ${p.window} send failed:`,
-      err.message,
-    );
+    console.error(`[reminder-email] ${p.window} send failed:`, err.message);
     return { delivered: false, reason: "send_failed", error: err.message };
   }
 }

@@ -166,6 +166,9 @@ a {
 .header .wrapper .list ul {
   display: flex;
   gap: 40px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .header .wrapper .list ul li {
@@ -182,6 +185,7 @@ a {
   background: linear-gradient(90deg, #0052ff 0%, #00a3ff 50%, #00d1ff 100%);
   -webkit-background-clip: text;
   background-clip: text;
+  text-decoration: none !important;
 }
 
 .header .wrapper .list ul li a:hover {

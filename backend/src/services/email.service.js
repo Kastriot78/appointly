@@ -40,6 +40,8 @@ function getTransporter() {
     port: Number(process.env.SMTP_PORT || process.env.EMAIL_PORT || 587),
     secure:
       process.env.SMTP_SECURE === "true" || process.env.EMAIL_SECURE === "true",
+    // Render/Gmail can fail on IPv6 routes; force IPv4 SMTP resolution.
+    family: 4,
     service: "gmail",
     auth:
       user && pass
