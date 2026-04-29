@@ -36,20 +36,32 @@ function getTransporter() {
   if (!host) return null;
 
   return nodemailer.createTransport({
-    host,
-    port: Number(process.env.SMTP_PORT || process.env.EMAIL_PORT || 587),
-    secure:
-      process.env.SMTP_SECURE === "true" || process.env.EMAIL_SECURE === "true",
-    // Render/Gmail can fail on IPv6 routes; force IPv4 SMTP resolution.
-    family: 4,
-    service: "gmail",
-    auth:
-      user && pass
-        ? {
-            user,
-            pass,
-          }
-        : undefined,
+    // host,
+    // port: Number(process.env.SMTP_PORT || process.env.EMAIL_PORT || 587),
+    // secure:
+    //   process.env.SMTP_SECURE === "true" || process.env.EMAIL_SECURE === "true",
+    // // Render/Gmail can fail on IPv6 routes; force IPv4 SMTP resolution.
+    // family: 4,
+    // service: "gmail",
+    // auth:
+    //   user && pass
+    //     ? {
+    //         user,
+    //         pass,
+    //       }
+    //     : undefined,
+
+    host: process.env.SMTP_HOST || "smtp.gmail.com",
+    // Port 587 is generally safer on Render than 465
+    port: Number(process.env.SMTP_PORT || 587),
+    // If port is 465, secure must be true. If 587, secure must be false.
+    secure: process.env.SMTP_PORT === "465",
+    family: 4, // Forces IPv4 to avoid the ENETUNREACH error
+    auth: user && pass ? { user, pass } : undefined,
+    // Add TLS settings for better compatibility
+    tls: {
+      rejectUnauthorized: true,
+    },
   });
 }
 
@@ -351,9 +363,7 @@ async function sendBusinessApprovedEmail(
     "",
     `Good news — your business "${businessName}" has been approved and is now visible to customers on Appointly.`,
     "",
-    publicProfileUrl
-      ? `View your public page: ${publicProfileUrl}`
-      : "",
+    publicProfileUrl ? `View your public page: ${publicProfileUrl}` : "",
     "",
     `Open your dashboard: ${appBaseUrl()}/dashboard`,
     "",

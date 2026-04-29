@@ -28,17 +28,41 @@ function resolveSmtpEnv() {
   return { host: host.trim(), user: user.trim(), pass };
 }
 
+// function getTransporter() {
+//   const { host, user, pass } = resolveSmtpEnv();
+//   if (!host) return null;
+//   return nodemailer.createTransport({
+//     host,
+//     port: Number(process.env.SMTP_PORT || process.env.EMAIL_PORT || 587),
+//     secure:
+//       process.env.SMTP_SECURE === "true" || process.env.EMAIL_SECURE === "true",
+//     // Render/Gmail can fail on IPv6 routes; force IPv4 SMTP resolution.
+//     family: 4,
+//     auth: user && pass ? { user, pass } : undefined,
+//   });
+// }
+
 function getTransporter() {
   const { host, user, pass } = resolveSmtpEnv();
   if (!host) return null;
+
+  const port = Number(process.env.SMTP_PORT || process.env.EMAIL_PORT || 587);
+
+  // Logic: Port 465 requires secure: true, Port 587 requires secure: false
+  const isSecure = port === 465;
+
   return nodemailer.createTransport({
     host,
-    port: Number(process.env.SMTP_PORT || process.env.EMAIL_PORT || 587),
-    secure:
-      process.env.SMTP_SECURE === "true" || process.env.EMAIL_SECURE === "true",
-    // Render/Gmail can fail on IPv6 routes; force IPv4 SMTP resolution.
+    port,
+    secure: isSecure,
+    // Forces IPv4. Essential for Render to avoid 2a00:1450... errors
     family: 4,
     auth: user && pass ? { user, pass } : undefined,
+    // Optimal for cloud environments to handle TLS handshakes
+    tls: {
+      rejectUnauthorized: true,
+      minVersion: "TLSv1.2",
+    },
   });
 }
 
