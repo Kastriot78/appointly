@@ -102,8 +102,20 @@ npm install
 
 Create your env file:
 
-```bash
-cp .env.example .env
+- macOS/Linux:
+  ```bash
+  cp .env.example .env
+  ```
+- Windows (PowerShell):
+  ```powershell
+  copy .env.example .env
+  ```
+
+Set required frontend variables in `frontend/.env`:
+
+```env
+VITE_API_URL=http://localhost:5000
+VITE_PUBLIC_APP_URL=http://localhost:5173
 ```
 
 Run frontend dev server:
@@ -121,8 +133,33 @@ npm install
 
 Create your env file:
 
-```bash
-cp .env.example .env
+- macOS/Linux:
+  ```bash
+  cp .env.example .env
+  ```
+- Windows (PowerShell):
+  ```powershell
+  copy .env.example .env
+  ```
+
+Set required backend variables in `backend/.env`:
+
+```env
+MONGO_URI=mongodb://127.0.0.1:27017/appointly
+JWT_SECRET=replace_with_a_long_random_secret
+FRONTEND_URL=http://localhost:5173
+CORS_ALLOWED_ORIGINS=http://localhost:5173
+```
+
+Optional (if email features are enabled):
+
+```env
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=your-email@example.com
+SMTP_PASS=your-app-password
+EMAIL_FROM="Appointly <noreply@yourdomain.com>"
 ```
 
 Run backend dev server:
