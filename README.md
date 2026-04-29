@@ -28,6 +28,11 @@ Built as a full-stack app with a React + Vite frontend and an Express + MongoDB 
   - Cancelled
   - No-shows
 - Calendar and closing-days management
+- Email integration settings (SMTP/provider setup flow)
+- Coupon management (plan-gated)
+- Smart staff ranking module (plan-gated)
+- Webhooks dashboard and delivery testing (Enterprise-gated)
+- Staff utilization insights and KPI cards
 - Reviews pages with rating filters
 - Customer pages:
   - My bookings
@@ -48,6 +53,8 @@ Built as a full-stack app with a React + Vite frontend and an Express + MongoDB 
 - JWT-based auth and role authorization
 - Plan/feature enforcement at API level
 - Webhooks management (Enterprise plan)
+- Coupons and smart-ranking feature enforcement by subscription plan
+- Email integration endpoints and mailer workflow support
 - Booking and dashboard KPI endpoints
 - Security middleware:
   - `helmet`
