@@ -73,7 +73,7 @@ app.get("/", (req, res) => {
   const dbHost = getMongoHost();
   res.json({
     ok: true,
-    message: "Appointly backend API is running..",
+    message: "Appointly backend API is running!",
     health: "/api/health",
     db: {
       connected: mongoose.connection?.readyState === 1,

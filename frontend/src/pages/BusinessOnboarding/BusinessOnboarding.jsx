@@ -60,8 +60,7 @@ function getBusinessSubmitErrorMessage(err) {
       ? String(data.errors[0]).trim()
       : "");
 
-  const details =
-    typeof data?.details === "string" ? data.details.trim() : "";
+  const details = typeof data?.details === "string" ? data.details.trim() : "";
 
   if (message && details && details !== message) {
     return `${message} (${details})`;
@@ -98,8 +97,7 @@ const BusinessOnboarding = () => {
 
   const bootstrapLoading = categoriesLoading || locationsLoading;
   const bootstrapFailed =
-    !bootstrapLoading &&
-    (categoriesError != null || locationsError != null);
+    !bootstrapLoading && (categoriesError != null || locationsError != null);
   const bootstrapMessage = categoriesError
     ? getApiErrorMessage(categoriesError)
     : locationsError
@@ -382,537 +380,557 @@ const BusinessOnboarding = () => {
           />
         ) : (
           <>
-        {/* Progress */}
-        <div className="ob-progress">
-          {stepLabels.map((label, i) => (
-            <div
-              key={i}
-              className={`ob-progress-step ${i + 1 <= step ? "active" : ""} ${i + 1 < step ? "done" : ""}`}
-            >
-              <div className="ob-progress-dot">
-                {i + 1 < step ? (
-                  <HiCheck size={20} strokeWidth={2.5} />
-                ) : (
-                  <span>{i + 1}</span>
-                )}
-              </div>
-              <span className="ob-progress-label">{label}</span>
-              {i < 4 && <div className="ob-progress-line" />}
-            </div>
-          ))}
-        </div>
-
-        {/* Step Content */}
-        <div className="ob-card">
-          {/* Step 1: Business Info */}
-          {step === 1 && (
-            <div className="ob-step">
-              <h2>Tell us about your business</h2>
-              <p className="ob-step-desc">
-                This information will appear on your public booking page
-              </p>
-
-              <div className="ob-approval-notice" role="status">
-                <strong>Admin review</strong>
-                <p>
-                  After you submit this business, a platform administrator will
-                  review it before it can appear in public search and discovery.
-                  You can still finish setup (hours, services, staff) in your
-                  dashboard while you wait — we&apos;ll make it clear when your
-                  listing is approved.
-                </p>
-              </div>
-
-              <div className="ob-form">
-                <div className="ob-field">
-                  <label>Business Name *</label>
-                  <input
-                    type="text"
-                    value={businessName}
-                    onChange={(e) => setBusinessName(e.target.value)}
-                    placeholder="e.g. Kalas Barber"
-                  />
-                </div>
-
-                <div className="ob-field">
-                  <label>Category *</label>
-                  {categoriesLoading ? (
-                    <div
-                      className="ob-category-grid ob-category-grid--skeleton"
-                      role="status"
-                      aria-label="Loading categories"
-                    >
-                      {Array.from({ length: CATEGORY_SKELETON_COUNT }).map(
-                        (_, i) => (
-                          <div
-                            key={i}
-                            className="ob-category-skel-card"
-                            aria-hidden
-                          >
-                            <span className="ob-category-skel-icon" />
-                            <span className="ob-category-skel-line" />
-                          </div>
-                        ),
-                      )}
-                    </div>
-                  ) : (
-                    <div className="ob-category-grid">
-                      {apiCategories.map((cat) => (
-                        <button
-                          key={cat.id}
-                          type="button"
-                          className={`ob-category-card ${category === cat.slug ? "selected" : ""}`}
-                          onClick={() => setCategory(cat.slug)}
-                        >
-                          <span className="ob-cat-icon">
-                            <CategoryGlyph iconKey={cat.iconKey} size={22} />
-                          </span>
-                          <span>{cat.name}</span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <div className="ob-field">
-                  <label htmlFor="ob-phone">Phone Number *</label>
-                  <PhoneField id="ob-phone" value={phone} onChange={setPhone} />
-                </div>
-
-                <div className="ob-row">
-                  <div className="ob-field">
-                    <label>Address</label>
-                    <input
-                      type="text"
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      placeholder="Street, neighborhood"
-                    />
-                  </div>
-                  <div className="ob-field">
-                    <label>City / Location *</label>
-                    {locationsLoading ? (
-                      <div
-                        className="ob-field-skeleton ob-field-skeleton--select"
-                        role="status"
-                        aria-live="polite"
-                        aria-label="Loading cities"
-                      />
-                    ) : locationSelectOptions.length === 0 ? (
-                      <p className="ob-step-desc" style={{ margin: 0 }}>
-                        {locationsError
-                          ? "Could not load cities. Check that the API is running and try again."
-                          : "No cities available yet. Ask an admin to add locations in the dashboard."}
-                      </p>
+            {/* Progress */}
+            <div className="ob-progress">
+              {stepLabels.map((label, i) => (
+                <div
+                  key={i}
+                  className={`ob-progress-step ${i + 1 <= step ? "active" : ""} ${i + 1 < step ? "done" : ""}`}
+                >
+                  <div className="ob-progress-dot">
+                    {i + 1 < step ? (
+                      <HiCheck size={20} strokeWidth={2.5} />
                     ) : (
-                      <CustomSelect
-                        options={locationSelectOptions}
-                        value={locationId}
-                        onChange={setLocationId}
-                        placeholder="Select city"
-                      />
+                      <span>{i + 1}</span>
                     )}
                   </div>
+                  <span className="ob-progress-label">{label}</span>
+                  {i < 4 && <div className="ob-progress-line" />}
                 </div>
+              ))}
+            </div>
 
-                <div className="ob-field">
-                  <label>Pricing currency</label>
-                  <CustomSelect
-                    options={CURRENCY_OPTIONS}
-                    value={currency}
-                    onChange={setCurrency}
-                    placeholder="Currency"
-                  />
-                  <p className="ob-step-desc" style={{ margin: "8px 0 0" }}>
-                    All service prices and booking totals will use this
-                    currency.
+            {/* Step Content */}
+            <div className="ob-card">
+              {/* Step 1: Business Info */}
+              {step === 1 && (
+                <div className="ob-step">
+                  <h2>Tell us about your business</h2>
+                  <p className="ob-step-desc">
+                    This information will appear on your public booking page
                   </p>
-                </div>
 
-                <div className="ob-field">
-                  <label>Description</label>
-                  <textarea
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Tell clients about your business..."
-                    rows="3"
-                  />
-                </div>
-
-                <div className="ob-field ob-field--map">
-                  <BusinessMapPicker
-                    value={coordinates}
-                    onChange={setCoordinates}
-                    defaultCity={
-                      locationSelectOptions.find(
-                        (o) => o.value === locationId,
-                      )?.label || ""
-                    }
-                    label="Pin your business on the map (optional)"
-                    hint="Search your street or landmark below so customers can find you. You can skip this — we'll try to place it automatically from your address."
-                  />
-                </div>
-
-                <div className="ob-row">
-                  <div className="ob-field">
-                    <label>Business Logo</label>
-                    <div
-                      className={`ob-upload-box ob-upload-box--logo ${logoPreview ? "has-preview" : ""}`}
-                    >
-                      {logoPreview ? (
-                        <img
-                          src={logoPreview}
-                          alt=""
-                          className="ob-upload-preview-img"
-                        />
-                      ) : (
-                        <>
-                          <HiOutlinePhotograph size={24} />
-                          <span>Upload Logo</span>
-                        </>
-                      )}
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => {
-                          const f = e.target.files?.[0];
-                          e.target.value = "";
-                          if (f) handleLogoFile(f);
-                        }}
-                      />
-                    </div>
+                  <div className="ob-approval-notice" role="status">
+                    <strong>Admin review</strong>
+                    <p>
+                      After you submit this business, a platform administrator
+                      will review it before it can appear in public search and
+                      discovery. You can still finish setup (hours, services,
+                      staff) in your dashboard while you wait — we&apos;ll make
+                      it clear when your listing is approved.
+                    </p>
                   </div>
-                  <div className="ob-field">
-                    <label>Cover Photo</label>
-                    <div
-                      className={`ob-upload-box ob-upload-box--cover ${coverPreview ? "has-preview" : ""}`}
-                    >
-                      {coverPreview ? (
-                        <img
-                          src={coverPreview}
-                          alt=""
-                          className="ob-upload-preview-img"
-                        />
-                      ) : (
-                        <>
-                          <HiOutlinePhotograph size={24} />
-                          <span>Upload Cover</span>
-                        </>
-                      )}
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => {
-                          const f = e.target.files?.[0];
-                          e.target.value = "";
-                          if (f) handleCoverFile(f);
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
 
-          {/* Step 2: Working Hours */}
-          {step === 2 && (
-            <div className="ob-step">
-              <h2>Set your working hours</h2>
-              <p className="ob-step-desc">
-                Clients can only book during these hours
-              </p>
-
-              <div className="ob-hours-list">
-                {hours.map((h, i) => (
-                  <div
-                    key={h.day}
-                    className={`ob-hours-row ${!h.active ? "inactive" : ""}`}
-                  >
-                    <div className="ob-day-toggle">
-                      <button
-                        type="button"
-                        className={`hours-toggle-visual ${h.active ? "active" : ""}`}
-                        onClick={() => toggleDay(i)}
-                        aria-pressed={h.active}
-                        aria-label={`${h.day}: ${h.active ? "open" : "closed"}`}
-                      >
-                        {h.active ? (
-                          <HiCheck className="hours-toggle-icon" />
-                        ) : null}
-                      </button>
-                      <span className="ob-day-name">{h.day}</span>
-                    </div>
-                    {h.active ? (
-                      <div className="ob-time-inputs">
-                        <input
-                          type="time"
-                          value={h.open}
-                          onChange={(e) =>
-                            updateHour(i, "open", e.target.value)
-                          }
-                        />
-                        <span className="ob-time-sep">to</span>
-                        <input
-                          type="time"
-                          value={h.close}
-                          onChange={(e) =>
-                            updateHour(i, "close", e.target.value)
-                          }
-                        />
-                      </div>
-                    ) : (
-                      <span className="ob-closed-label">Closed</span>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Step 3: Services */}
-          {step === 3 && (
-            <div className="ob-step">
-              <h2>Add your services</h2>
-              <p className="ob-step-desc">
-                You can always add more later from your dashboard
-              </p>
-
-              <div className="ob-services-list">
-                {services.map((service, i) => (
-                  <div key={service.id} className="ob-service-row">
-                    <div className="ob-service-num">{i + 1}</div>
-                    <div className="ob-service-fields">
+                  <div className="ob-form">
+                    <div className="ob-field">
+                      <label>Business Name *</label>
                       <input
                         type="text"
-                        value={service.name}
-                        onChange={(e) =>
-                          updateService(service.id, "name", e.target.value)
-                        }
-                        placeholder="Service name"
-                        className="ob-service-name"
+                        value={businessName}
+                        onChange={(e) => setBusinessName(e.target.value)}
+                        placeholder="e.g. Kalas Barber"
                       />
-                      <div className="ob-service-meta-inputs">
-                        <div className="ob-mini-field">
-                          <span>{normalizeCurrency(currency)}</span>
+                    </div>
+
+                    <div className="ob-field">
+                      <label>Category *</label>
+                      {categoriesLoading ? (
+                        <div
+                          className="ob-category-grid ob-category-grid--skeleton"
+                          role="status"
+                          aria-label="Loading categories"
+                        >
+                          {Array.from({ length: CATEGORY_SKELETON_COUNT }).map(
+                            (_, i) => (
+                              <div
+                                key={i}
+                                className="ob-category-skel-card"
+                                aria-hidden
+                              >
+                                <span className="ob-category-skel-icon" />
+                                <span className="ob-category-skel-line" />
+                              </div>
+                            ),
+                          )}
+                        </div>
+                      ) : (
+                        <div className="ob-category-grid">
+                          {apiCategories.map((cat) => (
+                            <button
+                              key={cat.id}
+                              type="button"
+                              className={`ob-category-card ${category === cat.slug ? "selected" : ""}`}
+                              onClick={() => setCategory(cat.slug)}
+                            >
+                              <span className="ob-cat-icon">
+                                <CategoryGlyph
+                                  iconKey={cat.iconKey}
+                                  size={22}
+                                />
+                              </span>
+                              <span>{cat.name}</span>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="ob-field">
+                      <label htmlFor="ob-phone">Phone Number *</label>
+                      <PhoneField
+                        id="ob-phone"
+                        value={phone}
+                        onChange={setPhone}
+                      />
+                    </div>
+
+                    <div className="ob-row">
+                      <div className="ob-field">
+                        <label>Address</label>
+                        <input
+                          type="text"
+                          value={address}
+                          onChange={(e) => setAddress(e.target.value)}
+                          placeholder="Street, neighborhood"
+                        />
+                      </div>
+                      <div className="ob-field">
+                        <label>City / Location *</label>
+                        {locationsLoading ? (
+                          <div
+                            className="ob-field-skeleton ob-field-skeleton--select"
+                            role="status"
+                            aria-live="polite"
+                            aria-label="Loading cities"
+                          />
+                        ) : locationSelectOptions.length === 0 ? (
+                          <p className="ob-step-desc" style={{ margin: 0 }}>
+                            {locationsError
+                              ? "Could not load cities. Check that the API is running and try again."
+                              : "No cities available yet. Ask an admin to add locations in the dashboard."}
+                          </p>
+                        ) : (
+                          <CustomSelect
+                            options={locationSelectOptions}
+                            value={locationId}
+                            onChange={setLocationId}
+                            placeholder="Select city"
+                          />
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="ob-field">
+                      <label>Pricing currency</label>
+                      <CustomSelect
+                        options={CURRENCY_OPTIONS}
+                        value={currency}
+                        onChange={setCurrency}
+                        placeholder="Currency"
+                      />
+                      <p className="ob-step-desc" style={{ margin: "8px 0 0" }}>
+                        All service prices and booking totals will use this
+                        currency.
+                      </p>
+                    </div>
+
+                    <div className="ob-field">
+                      <label>Description</label>
+                      <textarea
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        placeholder="Tell clients about your business..."
+                        rows="3"
+                      />
+                    </div>
+
+                    <div className="ob-field ob-field--map">
+                      <BusinessMapPicker
+                        value={coordinates}
+                        onChange={setCoordinates}
+                        defaultCity={
+                          locationSelectOptions.find(
+                            (o) => o.value === locationId,
+                          )?.label || ""
+                        }
+                        label="Pin your business on the map (optional)"
+                        hint="Search your street or landmark below so customers can find you. You can skip this — we'll try to place it automatically from your address."
+                      />
+                    </div>
+
+                    <div className="ob-row">
+                      <div className="ob-field">
+                        <label>Business Logo</label>
+                        <div
+                          className={`ob-upload-box ob-upload-box--logo ${logoPreview ? "has-preview" : ""}`}
+                        >
+                          {logoPreview ? (
+                            <img
+                              src={logoPreview}
+                              alt=""
+                              className="ob-upload-preview-img"
+                            />
+                          ) : (
+                            <>
+                              <HiOutlinePhotograph size={24} />
+                              <span>Upload Logo</span>
+                            </>
+                          )}
                           <input
-                            type="number"
-                            value={service.price}
-                            onChange={(e) =>
-                              updateService(service.id, "price", e.target.value)
-                            }
-                            placeholder="0"
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                              const f = e.target.files?.[0];
+                              e.target.value = "";
+                              if (f) handleLogoFile(f);
+                            }}
                           />
                         </div>
-                        <div className="ob-mini-field">
-                          <span>min</span>
+                      </div>
+                      <div className="ob-field">
+                        <label>Cover Photo</label>
+                        <div
+                          className={`ob-upload-box ob-upload-box--cover ${coverPreview ? "has-preview" : ""}`}
+                        >
+                          {coverPreview ? (
+                            <img
+                              src={coverPreview}
+                              alt=""
+                              className="ob-upload-preview-img"
+                            />
+                          ) : (
+                            <>
+                              <HiOutlinePhotograph size={24} />
+                              <span>Upload Cover</span>
+                            </>
+                          )}
                           <input
-                            type="number"
-                            value={service.duration}
-                            onChange={(e) =>
-                              updateService(
-                                service.id,
-                                "duration",
-                                e.target.value,
-                              )
-                            }
-                            placeholder="30"
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                              const f = e.target.files?.[0];
+                              e.target.value = "";
+                              if (f) handleCoverFile(f);
+                            }}
                           />
                         </div>
                       </div>
                     </div>
-                    {services.length > 1 && (
-                      <button
-                        className="ob-remove-btn"
-                        onClick={() => removeService(service.id)}
-                      >
-                        <HiOutlineTrash size={16} />
-                      </button>
-                    )}
                   </div>
-                ))}
-
-                <button className="ob-add-service" onClick={addService}>
-                  <HiOutlinePlus size={16} />
-                  Add another service
-                </button>
-              </div>
-            </div>
-          )}
-
-          {step === 4 && (
-            <div className="ob-step">
-              <h2>Add your team</h2>
-              <p className="ob-step-desc">
-                Add staff members who will provide services. You can add more
-                later.
-              </p>
-
-              <div className="ob-services-list">
-                {staff.map((member, i) => (
-                  <div key={member.id} className="ob-service-row ob-staff-row">
-                    <div className="ob-service-num">{i + 1}</div>
-                    <div className="ob-service-fields">
-                      <div className="ob-staff-inputs-row">
-                        <input
-                          type="text"
-                          value={member.name}
-                          onChange={(e) =>
-                            updateStaff(member.id, "name", e.target.value)
-                          }
-                          placeholder="Full name"
-                          className="ob-service-name"
-                        />
-                        <input
-                          type="text"
-                          value={member.role}
-                          onChange={(e) =>
-                            updateStaff(member.id, "role", e.target.value)
-                          }
-                          placeholder="Role"
-                          className="ob-service-name"
-                        />
-                      </div>
-                      <div className="ob-service-meta-inputs">
-                        <div className="ob-mini-field">
-                          {/* <span>📞</span> */}
-                          <PhoneField
-                            id={`ob-staff-phone-${member.id}`}
-                            value={member.phone}
-                            onChange={(v) =>
-                              updateStaff(member.id, "phone", v)
-                            }
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    {staff.length > 1 && (
-                      <button
-                        className="ob-remove-btn"
-                        onClick={() => removeStaff(member.id)}
-                      >
-                        <HiOutlineTrash size={16} />
-                      </button>
-                    )}
-                  </div>
-                ))}
-
-                <button className="ob-add-service" onClick={addStaff}>
-                  <HiOutlinePlus size={16} />
-                  Add another member
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Step 5: Finish */}
-          {step === 5 && (
-            <div className="ob-step ob-finish">
-              <div className="ob-finish-icon">🎉</div>
-              <h2>Ready to create your business</h2>
-              <p className="ob-step-desc">
-                We&apos;ll create <strong>{businessName}</strong> and save the
-                services and team members you entered. You can change them
-                anytime under My Business → Services or Staff.
-              </p>
-              {submitError ? (
-                <p className="ob-form-error" role="alert">
-                  {submitError}
-                </p>
-              ) : null}
-
-              <div className="ob-summary">
-                <div className="ob-summary-item">
-                  <span className="ob-summary-label">Business</span>
-                  <span className="ob-summary-value">{businessName}</span>
                 </div>
-                <div className="ob-summary-item">
-                  <span className="ob-summary-label">Category</span>
-                  <span className="ob-summary-value">
-                    {apiCategories.find((c) => c.slug === category)?.name ??
-                      category}
-                  </span>
-                </div>
-                <div className="ob-summary-item">
-                  <span className="ob-summary-label">Working Days</span>
-                  <span className="ob-summary-value">
-                    {hours.filter((h) => h.active).length} days/week
-                  </span>
-                </div>
-                <div className="ob-summary-item">
-                  <span className="ob-summary-label">Services</span>
-                  <span className="ob-summary-value">
-                    {services.filter((s) => s.name).length} services
-                  </span>
-                </div>
-                {(logoPreview || coverPreview) && (
-                  <div className="ob-summary-media">
-                    {logoPreview && (
-                      <div className="ob-summary-thumb-wrap">
-                        <span className="ob-summary-label">Logo</span>
-                        <img
-                          src={logoPreview}
-                          alt=""
-                          className="ob-summary-thumb ob-summary-thumb--logo"
-                        />
-                      </div>
-                    )}
-                    {coverPreview && (
-                      <div className="ob-summary-thumb-wrap">
-                        <span className="ob-summary-label">Cover</span>
-                        <img
-                          src={coverPreview}
-                          alt=""
-                          className="ob-summary-thumb ob-summary-thumb--cover"
-                        />
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Footer */}
-        <div className="ob-footer">
-          {step > 1 && step < 5 && (
-            <button className="ob-back-btn" onClick={() => setStep(step - 1)}>
-              <HiOutlineArrowLeft size={16} />
-              Back
-            </button>
-          )}
-          {step < 5 ? (
-            <button
-              className="ob-next-btn"
-              onClick={() => setStep(step + 1)}
-              disabled={!canProceed()}
-            >
-              Continue
-              <HiOutlineArrowRight size={16} />
-            </button>
-          ) : (
-            <button
-              className="ob-next-btn"
-              onClick={handleFinish}
-              disabled={submitLoading}
-            >
-              {submitLoading ? (
-                <span className="ob-btn-spinner" aria-hidden />
-              ) : (
-                <>
-                  Create business
-                  <HiOutlineArrowRight size={16} />
-                </>
               )}
-            </button>
-          )}
-          {step < 5 && (
-            <button className="ob-skip-btn" onClick={() => setStep(step + 1)}>
-              Skip for now
-            </button>
-          )}
-        </div>
+
+              {/* Step 2: Working Hours */}
+              {step === 2 && (
+                <div className="ob-step">
+                  <h2>Set your working hours</h2>
+                  <p className="ob-step-desc">
+                    Clients can only book during these hours
+                  </p>
+
+                  <div className="ob-hours-list">
+                    {hours.map((h, i) => (
+                      <div
+                        key={h.day}
+                        className={`ob-hours-row ${!h.active ? "inactive" : ""}`}
+                      >
+                        <div className="ob-day-toggle">
+                          <button
+                            type="button"
+                            className={`hours-toggle-visual ${h.active ? "active" : ""}`}
+                            onClick={() => toggleDay(i)}
+                            aria-pressed={h.active}
+                            aria-label={`${h.day}: ${h.active ? "open" : "closed"}`}
+                          >
+                            {h.active ? (
+                              <HiCheck className="hours-toggle-icon" />
+                            ) : null}
+                          </button>
+                          <span className="ob-day-name">{h.day}</span>
+                        </div>
+                        {h.active ? (
+                          <div className="ob-time-inputs">
+                            <input
+                              type="time"
+                              value={h.open}
+                              onChange={(e) =>
+                                updateHour(i, "open", e.target.value)
+                              }
+                            />
+                            <span className="ob-time-sep">to</span>
+                            <input
+                              type="time"
+                              value={h.close}
+                              onChange={(e) =>
+                                updateHour(i, "close", e.target.value)
+                              }
+                            />
+                          </div>
+                        ) : (
+                          <span className="ob-closed-label">Closed</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Step 3: Services */}
+              {step === 3 && (
+                <div className="ob-step">
+                  <h2>Add your services</h2>
+                  <p className="ob-step-desc">
+                    You can always add more later from your dashboard
+                  </p>
+
+                  <div className="ob-services-list">
+                    {services.map((service, i) => (
+                      <div key={service.id} className="ob-service-row">
+                        <div className="ob-service-num">{i + 1}</div>
+                        <div className="ob-service-fields">
+                          <input
+                            type="text"
+                            value={service.name}
+                            onChange={(e) =>
+                              updateService(service.id, "name", e.target.value)
+                            }
+                            placeholder="Service name"
+                            className="ob-service-name"
+                          />
+                          <div className="ob-service-meta-inputs">
+                            <div className="ob-mini-field">
+                              <span>{normalizeCurrency(currency)}</span>
+                              <input
+                                type="number"
+                                value={service.price}
+                                onChange={(e) =>
+                                  updateService(
+                                    service.id,
+                                    "price",
+                                    e.target.value,
+                                  )
+                                }
+                                placeholder="0"
+                              />
+                            </div>
+                            <div className="ob-mini-field">
+                              <span>min</span>
+                              <input
+                                type="number"
+                                value={service.duration}
+                                onChange={(e) =>
+                                  updateService(
+                                    service.id,
+                                    "duration",
+                                    e.target.value,
+                                  )
+                                }
+                                placeholder="30"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        {services.length > 1 && (
+                          <button
+                            className="ob-remove-btn"
+                            onClick={() => removeService(service.id)}
+                          >
+                            <HiOutlineTrash size={16} />
+                          </button>
+                        )}
+                      </div>
+                    ))}
+
+                    <button className="ob-add-service" onClick={addService}>
+                      <HiOutlinePlus size={16} />
+                      Add another service
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {step === 4 && (
+                <div className="ob-step">
+                  <h2>Add your team</h2>
+                  <p className="ob-step-desc">
+                    Add staff members who will provide services. You can add
+                    more later.
+                  </p>
+
+                  <div className="ob-services-list">
+                    {staff.map((member, i) => (
+                      <div
+                        key={member.id}
+                        className="ob-service-row ob-staff-row"
+                      >
+                        <div className="ob-service-num">{i + 1}</div>
+                        <div className="ob-service-fields">
+                          <div className="ob-staff-inputs-row">
+                            <input
+                              type="text"
+                              value={member.name}
+                              onChange={(e) =>
+                                updateStaff(member.id, "name", e.target.value)
+                              }
+                              placeholder="Full name"
+                              className="ob-service-name"
+                            />
+                            <input
+                              type="text"
+                              value={member.role}
+                              onChange={(e) =>
+                                updateStaff(member.id, "role", e.target.value)
+                              }
+                              placeholder="Role"
+                              className="ob-service-name"
+                            />
+                          </div>
+                          <div className="ob-service-meta-inputs">
+                            <div className="ob-mini-field">
+                              {/* <span>📞</span> */}
+                              <PhoneField
+                                id={`ob-staff-phone-${member.id}`}
+                                value={member.phone}
+                                onChange={(v) =>
+                                  updateStaff(member.id, "phone", v)
+                                }
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        {staff.length > 1 && (
+                          <button
+                            className="ob-remove-btn"
+                            onClick={() => removeStaff(member.id)}
+                          >
+                            <HiOutlineTrash size={16} />
+                          </button>
+                        )}
+                      </div>
+                    ))}
+
+                    <button className="ob-add-service" onClick={addStaff}>
+                      <HiOutlinePlus size={16} />
+                      Add another member
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 5: Finish */}
+              {step === 5 && (
+                <div className="ob-step ob-finish">
+                  <div className="ob-finish-icon">🎉</div>
+                  <h2>Ready to create your business</h2>
+                  <p className="ob-step-desc">
+                    We&apos;ll create <strong>{businessName}</strong> and save
+                    the services and team members you entered. You can change
+                    them anytime under My Business → Services or Staff.
+                  </p>
+                  {submitError ? (
+                    <p className="ob-form-error" role="alert">
+                      {submitError}
+                    </p>
+                  ) : null}
+
+                  <div className="ob-summary">
+                    <div className="ob-summary-item">
+                      <span className="ob-summary-label">Business</span>
+                      <span className="ob-summary-value">{businessName}</span>
+                    </div>
+                    <div className="ob-summary-item">
+                      <span className="ob-summary-label">Category</span>
+                      <span className="ob-summary-value">
+                        {apiCategories.find((c) => c.slug === category)?.name ??
+                          category}
+                      </span>
+                    </div>
+                    <div className="ob-summary-item">
+                      <span className="ob-summary-label">Working Days</span>
+                      <span className="ob-summary-value">
+                        {hours.filter((h) => h.active).length} days/week
+                      </span>
+                    </div>
+                    <div className="ob-summary-item">
+                      <span className="ob-summary-label">Services</span>
+                      <span className="ob-summary-value">
+                        {services.filter((s) => s.name).length} services
+                      </span>
+                    </div>
+                    {(logoPreview || coverPreview) && (
+                      <div className="ob-summary-media">
+                        {logoPreview && (
+                          <div className="ob-summary-thumb-wrap">
+                            <span className="ob-summary-label">Logo</span>
+                            <img
+                              src={logoPreview}
+                              alt=""
+                              className="ob-summary-thumb ob-summary-thumb--logo"
+                            />
+                          </div>
+                        )}
+                        {coverPreview && (
+                          <div className="ob-summary-thumb-wrap">
+                            <span className="ob-summary-label">Cover</span>
+                            <img
+                              src={coverPreview}
+                              alt=""
+                              className="ob-summary-thumb ob-summary-thumb--cover"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="ob-footer">
+              {step > 1 && step < 5 && (
+                <button
+                  className="ob-back-btn"
+                  onClick={() => setStep(step - 1)}
+                >
+                  <HiOutlineArrowLeft size={16} />
+                  Back
+                </button>
+              )}
+              {step < 5 ? (
+                <button
+                  className="ob-next-btn"
+                  onClick={() => setStep(step + 1)}
+                  disabled={!canProceed()}
+                >
+                  Continue
+                  <HiOutlineArrowRight size={16} />
+                </button>
+              ) : (
+                <button
+                  className="ob-next-btn"
+                  onClick={handleFinish}
+                  disabled={submitLoading}
+                >
+                  {submitLoading ? (
+                    <span className="ob-btn-spinner" aria-hidden />
+                  ) : (
+                    <>
+                      Create business
+                      <HiOutlineArrowRight size={16} />
+                    </>
+                  )}
+                </button>
+              )}
+              {step < 5 && (
+                <button
+                  className="ob-skip-btn"
+                  onClick={() => setStep(step + 1)}
+                >
+                  Skip for now
+                </button>
+              )}
+            </div>
           </>
         )}
       </div>

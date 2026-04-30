@@ -32,6 +32,13 @@ function errorHandler(err, req, res, next) {
 
   const status = err.statusCode || err.status || 500;
   const isDev = process.env.NODE_ENV !== "production";
+  const isCreateBusinessRoute =
+    req?.method === "POST" &&
+    String(req?.originalUrl || "").startsWith("/api/businesses");
+  const exposeDetails =
+    isDev ||
+    isCreateBusinessRoute ||
+    String(process.env.EXPOSE_ERROR_DETAILS || "").toLowerCase() === "true";
 
   let message =
     status === 500 ? "Something went wrong" : err.message || "Request failed";
@@ -41,6 +48,13 @@ function errorHandler(err, req, res, next) {
   }
 
   const body = { message };
+  if (status === 500 && exposeDetails && err.message) {
+    body.details = err.message;
+    if (isCreateBusinessRoute) {
+      body.hint =
+        "Business creation failed on server. If request includes images, retry without images or use external storage (Cloudinary/S3) on Vercel.";
+    }
+  }
   if (err.extra && typeof err.extra === "object") {
     Object.assign(body, err.extra);
   }
