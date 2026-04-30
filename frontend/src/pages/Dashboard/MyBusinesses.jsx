@@ -98,6 +98,11 @@ const MyBusinesses = () => {
       await deleteBusiness(id);
       showToast("Business deleted.", "success");
       setBusinesses((prev) => prev.filter((b) => b.id !== id));
+      window.dispatchEvent(
+        new CustomEvent("appointly:businesses-changed", {
+          detail: { action: "deleted", id: String(id) },
+        }),
+      );
       setDeleteConfirm(null);
     } catch (err) {
       showToast(getApiErrorMessage(err), "error");

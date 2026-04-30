@@ -43,7 +43,7 @@ async function listServices(req, res) {
   const businessId = req.params.id;
   await assertCanManageBusinessId(req, businessId);
   const rows = await Service.find({ business: businessId })
-    .sort({ createdAt: -1 })
+    .sort({ sortOrder: 1, createdAt: 1, _id: 1 })
     .lean();
   res.json({
     services: rows.map((s) => ({
@@ -52,6 +52,7 @@ async function listServices(req, res) {
       price: s.price,
       duration: s.duration,
       description: s.description ?? "",
+      sortOrder: Number.isFinite(s.sortOrder) ? s.sortOrder : 0,
       isActive: s.isActive !== false,
       promotion: s.promotion || null,
     })),
@@ -75,12 +76,19 @@ async function createService(req, res) {
   if (!Number.isFinite(d) || d < 1) {
     return res.status(400).json({ message: "Valid duration (minutes) is required" });
   }
+  const last = await Service.findOne({ business: businessId })
+    .sort({ sortOrder: -1, createdAt: -1 })
+    .select("sortOrder")
+    .lean();
+  const nextSortOrder =
+    last && Number.isFinite(last.sortOrder) ? last.sortOrder + 1 : 0;
   const doc = await Service.create({
     business: businessId,
     name: n,
     price: p,
     duration: d,
     description: String(description ?? "").trim(),
+    sortOrder: nextSortOrder,
     isActive: isActive !== false,
   });
   if (req.body.promotion != null) {
@@ -213,10 +221,53 @@ async function applyPromotionBulk(req, res) {
   return res.json({ updated, total: services.length });
 }
 
+/**
+ * PUT /api/businesses/:id/services/reorder
+ * Body: { orderedServiceIds: string[] }
+ */
+async function reorderServices(req, res) {
+  const businessId = req.params.id;
+  await assertCanManageBusinessId(req, businessId);
+  const ids = Array.isArray(req.body?.orderedServiceIds)
+    ? req.body.orderedServiceIds.map((v) => String(v || "").trim()).filter(Boolean)
+    : null;
+  if (!ids || ids.length === 0) {
+    return res.status(400).json({ message: "orderedServiceIds is required" });
+  }
+  if (!ids.every((id) => mongoose.isValidObjectId(id))) {
+    return res.status(400).json({ message: "orderedServiceIds contains invalid id" });
+  }
+  const unique = [...new Set(ids)];
+  if (unique.length !== ids.length) {
+    return res.status(400).json({ message: "orderedServiceIds must not contain duplicates" });
+  }
+  const services = await Service.find({ business: businessId })
+    .select("_id")
+    .lean();
+  const existingIds = new Set(services.map((s) => String(s._id)));
+  if (existingIds.size !== unique.length || unique.some((id) => !existingIds.has(id))) {
+    return res.status(400).json({
+      message:
+        "orderedServiceIds must contain every service id for this business exactly once",
+    });
+  }
+  const bulkOps = unique.map((id, idx) => ({
+    updateOne: {
+      filter: { _id: id, business: businessId },
+      update: { $set: { sortOrder: idx } },
+    },
+  }));
+  if (bulkOps.length > 0) {
+    await Service.bulkWrite(bulkOps);
+  }
+  return res.json({ ok: true });
+}
+
 module.exports = {
   listServices,
   createService,
   updateService,
   deleteService,
   applyPromotionBulk,
+  reorderServices,
 };

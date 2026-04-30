@@ -250,6 +250,14 @@ button.db-nav-link {
   padding-left: 28px;
   font-size: 13px;
 }
+.db-workspace-name {
+  flex: 1;
+  min-width: 0;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 .db-sidebar-footer {
   padding: 16px 10px;
@@ -528,10 +536,11 @@ button.db-nav-link {
 .db-ws-modal {
   background: #fff;
   border-radius: 12px;
-  max-width: 420px;
+  max-width: 560px;
   width: 100%;
   padding: 28px 24px;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  text-align: center;
 }
 .db-ws-modal h2 {
   margin: 0 0 8px;
@@ -552,6 +561,12 @@ button.db-nav-link {
   flex-direction: column;
   gap: 10px;
 }
+.db-ws-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
 .db-ws-item {
   width: 100%;
   display: flex;
@@ -559,7 +574,7 @@ button.db-nav-link {
   gap: 12px;
   padding: 14px 16px;
   border: 1px solid #e2e8f0;
-  border-radius: 10px;
+  border-radius: 6px;
   background: #f8fafc;
   font-size: 15px;
   font-weight: 600;
@@ -573,6 +588,17 @@ button.db-nav-link {
 .db-ws-item:hover {
   background: #eef2ff;
   border-color: #c7d2fe;
+}
+.db-ws-item--primary {
+  text-decoration: none;
+  background: #4f46e5;
+  border-color: #4f46e5;
+  color: #fff;
+  justify-content: center;
+}
+.db-ws-item--primary:hover {
+  background: #4338ca;
+  border-color: #4338ca;
 }
 .db-ws-logout {
   margin-top: 20px;

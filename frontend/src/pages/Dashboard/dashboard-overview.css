@@ -61,6 +61,7 @@
 /* ============ QUICK ACTIONS ============ */
 .dp-quick-actions {
   margin-bottom: 32px;
+  margin-top: 32px;
 }
 
 .dp-actions-grid {
@@ -868,6 +869,22 @@
 
   .dp-overview-value {
     font-size: 18px;
+  }
+
+  .dp-staff-util-table {
+    min-width: 0;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  .dp-staff-util-table th,
+  .dp-staff-util-table td {
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .dp-staff-util-cell {
+    min-width: 0;
   }
 
   .dp-top-customers-table {

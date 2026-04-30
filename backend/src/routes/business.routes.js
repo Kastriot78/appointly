@@ -73,6 +73,12 @@ router.post(
   asyncHandler(serviceController.applyPromotionBulk),
 );
 router.put(
+  "/:id/services/reorder",
+  authenticate,
+  requireTenant,
+  asyncHandler(serviceController.reorderServices),
+);
+router.put(
   "/:id/services/:serviceId",
   authenticate,
   requireTenantOrStaff,

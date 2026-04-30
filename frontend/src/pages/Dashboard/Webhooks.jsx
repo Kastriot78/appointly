@@ -285,7 +285,7 @@ const Webhooks = () => {
 
   return (
     <div className="dp-page dp-webhooks-layout">
-      <div className="dp-header">
+      <div className="dp-header align-items-center">
         <h1 className="dp-title">Webhooks</h1>
         <p className="dp-subtitle">
           Register external URLs that should receive booking events for{" "}

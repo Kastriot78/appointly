@@ -7,6 +7,7 @@ import Footer from "./Footer";
 const Layout = () => (
   <>
     <Header />
+    <div className="header-spacer" aria-hidden="true" />
     <Outlet />
     <Footer />
     <ScrollToTop />

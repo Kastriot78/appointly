@@ -139,6 +139,12 @@ export function applyPromotionBulk(businessId, body) {
   );
 }
 
+export function reorderServices(businessId, orderedServiceIds) {
+  return http.put(`/api/businesses/${businessId}/services/reorder`, {
+    orderedServiceIds,
+  });
+}
+
 export function deleteServiceApi(businessId, serviceId) {
   return http.delete(
     `/api/businesses/${businessId}/services/${serviceId}`,

@@ -88,8 +88,13 @@ const Footer = () => {
                   type="submit"
                   className="footer__submit"
                   disabled={loading}
+                  aria-busy={loading ? "true" : "false"}
                 >
-                  {loading ? "…" : "Subscribe"}
+                  {loading ? (
+                    <span className="footer__spinner" aria-hidden="true" />
+                  ) : (
+                    <span className="footer__submit-label">Subscribe</span>
+                  )}
                 </button>
               </form>
               {error ? (

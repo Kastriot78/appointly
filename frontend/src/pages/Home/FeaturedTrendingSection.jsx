@@ -210,16 +210,6 @@ function FeaturedTrendingSection() {
 
         {showTrending ? (
           <div className={`home-ft__block ${showFeatured ? "home-ft__block--trending" : ""}`}>
-            <div className="home-ft__row-head">
-              <h3 className="home-ft__row-title">
-                <HiOutlineTrendingUp size={20} className="home-ft__row-icon" />
-                Trending now
-              </h3>
-              <p className="home-ft__row-desc">
-                Most reviewed and active listings — what clients are booking
-                lately.
-              </p>
-            </div>
             <div className="home-ft__scroll" role="list">
               {trendingRow.map((b) => (
                 <FeaturedCard

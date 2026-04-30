@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import {
   HiOutlineUserCircle,
@@ -23,8 +23,24 @@ const Header = () => {
   const { user, ready, logout } = useAuth();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const toggle = () => setIsOpen((o) => !o);
   const close = () => setIsOpen(false);
+
+  useEffect(() => {
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        setIsScrolled(window.scrollY > 10);
+        ticking = false;
+      });
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const handleMobileLogout = () => {
     logout();
@@ -36,7 +52,7 @@ const Header = () => {
     user && ((user.email || user.pendingEmail || "").trim() || null);
 
   return (
-    <header className="header">
+    <header className={`header${isScrolled ? " header--scrolled" : ""}`}>
       <div className="container">
         <div className="wrapper">
           <Link to="/" className="header-logo">

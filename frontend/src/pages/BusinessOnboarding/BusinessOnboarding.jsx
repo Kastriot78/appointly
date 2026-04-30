@@ -238,10 +238,10 @@ const BusinessOnboarding = () => {
     if (step === 2) return hours.some((h) => h.active);
     if (step === 3) return services.some((s) => s.name && s.price);
     if (step === 4) {
-      const anyFilled = staff.some(
-        (s) => s.name.trim() || s.role.trim() || s.phone.trim(),
+      const hasAtLeastOneValidStaff = staff.some(
+        (s) => s.name.trim() && s.role.trim(),
       );
-      if (!anyFilled) return true;
+      if (!hasAtLeastOneValidStaff) return false;
       return staff.every((s) => {
         if (!s.name.trim() && !s.role.trim() && !s.phone.trim()) return true;
         return s.name.trim() && s.role.trim();
@@ -249,6 +249,7 @@ const BusinessOnboarding = () => {
     }
     return true;
   };
+
   const handleFinish = async () => {
     if (submitLoading) return;
     setSubmitError(null);
@@ -492,6 +493,7 @@ const BusinessOnboarding = () => {
                           value={address}
                           onChange={(e) => setAddress(e.target.value)}
                           placeholder="Street, neighborhood"
+                          className="address_input_new_bussiness"
                         />
                       </div>
                       <div className="ob-field">
@@ -753,8 +755,8 @@ const BusinessOnboarding = () => {
                 <div className="ob-step">
                   <h2>Add your team</h2>
                   <p className="ob-step-desc">
-                    Add staff members who will provide services. You can add
-                    more later.
+                    Add staff members who will provide services. At least one
+                    staff member is required.
                   </p>
 
                   <div className="ob-services-list">
@@ -922,7 +924,7 @@ const BusinessOnboarding = () => {
                   )}
                 </button>
               )}
-              {step < 5 && (
+              {step < 5 && step !== 4 && (
                 <button
                   className="ob-skip-btn"
                   onClick={() => setStep(step + 1)}

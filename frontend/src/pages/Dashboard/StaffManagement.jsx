@@ -217,6 +217,20 @@ const StaffManagement = () => {
     });
   };
 
+  const selectAllServices = () => {
+    setForm({
+      ...form,
+      serviceIds: serviceOptions.map((s) => s.id),
+    });
+  };
+
+  const clearAllServices = () => {
+    setForm({
+      ...form,
+      serviceIds: [],
+    });
+  };
+
   const addTimeOffRow = () => {
     setForm({
       ...form,
@@ -841,6 +855,31 @@ const StaffManagement = () => {
                     role="group"
                     aria-label="Services this staff member can perform"
                   >
+                    {user?.role === "tenant" ? (
+                      <div className="staff-svc-toolbar">
+                        <span className="staff-svc-toolbar-count">
+                          {form.serviceIds.length} of {serviceOptions.length} selected
+                        </span>
+                        <div className="staff-svc-toolbar-actions">
+                          <button
+                            type="button"
+                            className="staff-svc-toolbar-btn"
+                            onClick={selectAllServices}
+                            disabled={form.serviceIds.length === serviceOptions.length}
+                          >
+                            Select all
+                          </button>
+                          <button
+                            type="button"
+                            className="staff-svc-toolbar-btn"
+                            onClick={clearAllServices}
+                            disabled={form.serviceIds.length === 0}
+                          >
+                            Clear all
+                          </button>
+                        </div>
+                      </div>
+                    ) : null}
                     {serviceOptions.map((s) => {
                       const selected = form.serviceIds.map(String).includes(String(s.id));
                       return (

@@ -40,6 +40,12 @@ const serviceSchema = new mongoose.Schema(
       default: 1,
       min: 1,
     },
+    sortOrder: {
+      type: Number,
+      default: 0,
+      min: 0,
+      index: true,
+    },
     isActive: {
       type: Boolean,
       default: true,
@@ -55,6 +61,7 @@ const serviceSchema = new mongoose.Schema(
 );
 
 serviceSchema.index({ business: 1, name: 1 });
+serviceSchema.index({ business: 1, sortOrder: 1, createdAt: 1 });
 
 serviceSchema.set("toJSON", {
   virtuals: true,

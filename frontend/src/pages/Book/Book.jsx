@@ -125,7 +125,12 @@ function BusinessCardSkeleton({ index }) {
   );
 }
 
-function BusinessCard({ business, index, categoryMetaBySlug, locationNameById }) {
+function BusinessCard({
+  business,
+  index,
+  categoryMetaBySlug,
+  locationNameById,
+}) {
   const imgSrc = resolveMediaUrl(business.image);
   const [imageLoaded, setImageLoaded] = useState(!imgSrc);
   const [imageFailed, setImageFailed] = useState(false);
@@ -468,7 +473,11 @@ const Book = () => {
     const seenIds = new Set(fromApi.map((o) => o.value));
     /** Avoid duplicates when businesses store a label (e.g. city name) that already exists in the locations table. */
     const seenLabels = new Set(
-      apiLocations.map((l) => String(l.name || "").trim().toLowerCase()),
+      apiLocations.map((l) =>
+        String(l.name || "")
+          .trim()
+          .toLowerCase(),
+      ),
     );
     const extra = new Set();
     for (const b of businesses) {
@@ -519,8 +528,7 @@ const Book = () => {
           const mo = String(now.getMonth() + 1).padStart(2, "0");
           const day = String(now.getDate()).padStart(2, "0");
           params.availableOn = `${y}-${mo}-${day}`;
-          params.clientNowMinutes =
-            now.getHours() * 60 + now.getMinutes();
+          params.clientNowMinutes = now.getHours() * 60 + now.getMinutes();
         }
         const pMin =
           debouncedPrices.min === "" ? NaN : Number(debouncedPrices.min);
@@ -531,9 +539,7 @@ const Book = () => {
 
         const { data } = await listPublicBusinesses(params);
         if (!cancelled) {
-          setBusinesses(
-            Array.isArray(data.businesses) ? data.businesses : [],
-          );
+          setBusinesses(Array.isArray(data.businesses) ? data.businesses : []);
         }
       } catch (err) {
         if (!cancelled) {
@@ -577,10 +583,7 @@ const Book = () => {
         if (bl === activeLocation) return true;
         if (locMeta) {
           const name = locMeta.name.trim();
-          return (
-            bl === name ||
-            bl.toLowerCase() === name.toLowerCase()
-          );
+          return bl === name || bl.toLowerCase() === name.toLowerCase();
         }
         return bl === activeLocation;
       });
@@ -622,8 +625,7 @@ const Book = () => {
      */
     if (userLocation && radiusKm != null) {
       result = result.filter(
-        (b) =>
-          !Number.isFinite(b._distanceKm) || b._distanceKm <= radiusKm,
+        (b) => !Number.isFinite(b._distanceKm) || b._distanceKm <= radiusKm,
       );
     }
 
@@ -737,6 +739,7 @@ const Book = () => {
     Boolean(priceMaxInput.trim());
 
   const searchDisabled = loading || businesses.length === 0;
+  const filtersDisabled = loading || Boolean(loadError) || businesses.length === 0;
 
   return (
     <main className="explore-page">
@@ -840,16 +843,17 @@ const Book = () => {
       {/* Filters + Results */}
       <section className="explore-results">
         <div className="container">
-          <div className="filters-row">
+          <div
+            className={`filters-row${filtersDisabled ? " filters-row--disabled" : ""}`}
+            aria-disabled={filtersDisabled}
+          >
             <div className="filters-left">
               <div className="filter-select-wrapper">
                 <CustomSelect
                   options={locationOptions}
                   value={activeLocation}
                   onChange={setActiveLocation}
-                  icon={
-                    <HiOutlineLocationMarker size={18} strokeWidth={1.5} />
-                  }
+                  icon={<HiOutlineLocationMarker size={18} strokeWidth={1.5} />}
                   placeholder="Location"
                 />
               </div>
@@ -870,18 +874,14 @@ const Book = () => {
                 aria-checked={availableTodayOnly}
                 className="explore-filter-toggle"
                 onClick={() => setAvailableTodayOnly(!availableTodayOnly)}
+                disabled={filtersDisabled}
               >
                 <div
                   className={`bm-checkbox ${availableTodayOnly ? "checked" : ""}`}
                   aria-hidden
                 >
                   {availableTodayOnly ? (
-                    <svg
-                      width="12"
-                      height="12"
-                      viewBox="0 0 12 12"
-                      fill="none"
-                    >
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
                       <path
                         d="M2 6.5L4.5 9L10 3"
                         stroke="#fff"
@@ -912,6 +912,7 @@ const Book = () => {
                   value={priceMinInput}
                   onChange={(e) => setPriceMinInput(e.target.value)}
                   aria-label="Minimum price"
+                  disabled={filtersDisabled}
                 />
                 <span className="explore-price-dash">–</span>
                 <input
@@ -923,11 +924,16 @@ const Book = () => {
                   value={priceMaxInput}
                   onChange={(e) => setPriceMaxInput(e.target.value)}
                   aria-label="Maximum price"
+                  disabled={filtersDisabled}
                 />
               </div>
 
               {hasActiveFilters && (
-                <button className="clear-filters-btn" onClick={clearFilters}>
+                <button
+                  className="clear-filters-btn"
+                  onClick={clearFilters}
+                  disabled={filtersDisabled}
+                >
                   Clear All
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                     <path
@@ -957,7 +963,9 @@ const Book = () => {
                   <CustomSelect
                     options={radiusOptions}
                     value={radiusKm == null ? "all" : radiusKm}
-                    onChange={(v) => setRadiusKm(v === "all" ? null : Number(v))}
+                    onChange={(v) =>
+                      setRadiusKm(v === "all" ? null : Number(v))
+                    }
                     icon={
                       <HiOutlineLocationMarker size={16} strokeWidth={1.5} />
                     }
@@ -973,7 +981,8 @@ const Book = () => {
                   onClick={
                     userLocation ? handleClearLocation : handleFindNearMe
                   }
-                  disabled={geoLoading}
+                  disabled={filtersDisabled || geoLoading}
+                  aria-disabled={filtersDisabled || geoLoading}
                   title={
                     userLocation
                       ? "Clear location & near-me sort"
@@ -998,21 +1007,18 @@ const Book = () => {
                       Your browser is blocking location
                     </div>
                     <p className="near-me-help-text">
-                      To sort by distance, allow this site to use your
-                      location:
+                      To sort by distance, allow this site to use your location:
                     </p>
                     <ol className="near-me-help-steps">
                       <li>
-                        Click the <strong>lock / settings icon</strong> on
-                        the left of the address bar.
+                        Click the <strong>lock / settings icon</strong> on the
+                        left of the address bar.
                       </li>
                       <li>
-                        Find <strong>Location</strong> in the list and set
-                        it to <strong>Allow</strong>.
+                        Find <strong>Location</strong> in the list and set it to{" "}
+                        <strong>Allow</strong>.
                       </li>
-                      <li>
-                        Reload this page so the change takes effect.
-                      </li>
+                      <li>Reload this page so the change takes effect.</li>
                     </ol>
                     <div className="near-me-help-actions">
                       <button
@@ -1045,9 +1051,7 @@ const Book = () => {
                     }
                     setActiveSort(v);
                   }}
-                  icon={
-                    <HiOutlineSwitchVertical size={18} strokeWidth={1.5} />
-                  }
+                  icon={<HiOutlineSwitchVertical size={18} strokeWidth={1.5} />}
                   placeholder="Sort by"
                 />
               </div>
@@ -1062,6 +1066,7 @@ const Book = () => {
                   className={`view-toggle-btn${viewMode === "list" ? " is-active" : ""}`}
                   onClick={() => setViewMode("list")}
                   aria-pressed={viewMode === "list"}
+                  disabled={filtersDisabled}
                 >
                   <HiOutlineViewList size={16} strokeWidth={2} />
                   List
@@ -1071,6 +1076,7 @@ const Book = () => {
                   className={`view-toggle-btn${viewMode === "map" ? " is-active" : ""}`}
                   onClick={() => setViewMode("map")}
                   aria-pressed={viewMode === "map"}
+                  disabled={filtersDisabled}
                 >
                   <HiOutlineMap size={16} strokeWidth={2} />
                   Map
@@ -1119,10 +1125,7 @@ const Book = () => {
             </div>
           ) : filtered.length > 0 ? (
             viewMode === "map" ? (
-              <DiscoverMap
-                businesses={filtered}
-                userLocation={userLocation}
-              />
+              <DiscoverMap businesses={filtered} userLocation={userLocation} />
             ) : (
               <div
                 className="businesses-grid"

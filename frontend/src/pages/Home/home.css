@@ -19,9 +19,21 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 55% at 15% 20%, rgba(99, 102, 241, 0.35), transparent 55%),
-    radial-gradient(ellipse 70% 50% at 85% 10%, rgba(16, 185, 129, 0.22), transparent 50%),
-    radial-gradient(ellipse 60% 45% at 50% 95%, rgba(79, 70, 229, 0.2), transparent 45%);
+    radial-gradient(
+      ellipse 80% 55% at 15% 20%,
+      rgba(99, 102, 241, 0.35),
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 70% 50% at 85% 10%,
+      rgba(16, 185, 129, 0.22),
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse 60% 45% at 50% 95%,
+      rgba(79, 70, 229, 0.2),
+      transparent 45%
+    );
   pointer-events: none;
 }
 
@@ -41,7 +53,11 @@
     linear-gradient(90deg, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
   background-size: 48px 48px;
   mask-image: radial-gradient(ellipse 75% 70% at 50% 40%, black, transparent);
-  -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 40%, black, transparent);
+  -webkit-mask-image: radial-gradient(
+    ellipse 75% 70% at 50% 40%,
+    black,
+    transparent
+  );
   pointer-events: none;
 }
 
@@ -470,7 +486,11 @@
   align-items: center;
   justify-content: center;
   border-radius: 12px;
-  background: linear-gradient(145deg, rgba(99, 102, 241, 0.35), rgba(79, 70, 229, 0.15));
+  background: linear-gradient(
+    145deg,
+    rgba(99, 102, 241, 0.35),
+    rgba(79, 70, 229, 0.15)
+  );
   color: #c7d2fe;
   margin-bottom: 12px;
 }
@@ -586,13 +606,9 @@
 }
 
 .home-ft__scroll {
-  display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  padding: 4px 4px 12px;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: thin;
-  scrollbar-color: #c7d2fe transparent;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
 }
 
 .home-ft__scroll::-webkit-scrollbar {
@@ -799,7 +815,12 @@
 
 /* Dark mode: Featured & Trending section */
 [data-theme="dark"] .home-ft {
-  background: linear-gradient(180deg, #0b1220 0%, #0f172a 45%, #0b1220 100%) !important;
+  background: linear-gradient(
+    180deg,
+    #0b1220 0%,
+    #0f172a 45%,
+    #0b1220 100%
+  ) !important;
   border-top-color: rgba(148, 163, 184, 0.2) !important;
   border-bottom-color: rgba(148, 163, 184, 0.2) !important;
 }

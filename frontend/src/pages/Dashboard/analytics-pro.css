@@ -72,6 +72,57 @@
 .dt-analytics .dt-analytics-grid {
   margin-top: 24px;
 }
+.dt-analytics .dp-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+.dt-analytics .dp-overview-stat {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: 12px;
+}
+.dt-analytics .dp-overview-icon {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: var(--app-surface-2);
+  border: 1px solid var(--app-border);
+}
+.dt-analytics .dp-overview-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 2px;
+}
+.dt-analytics .dt-stat-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+.dt-analytics .dp-overview-value {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1;
+}
+.dt-analytics .dp-overview-label {
+  font-size: 13px;
+  color: var(--app-text-muted);
+}
+.dt-analytics .dt-change {
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
 .dt-analytics > .dt-analytics-card,
 .dt-analytics > .dt-analytics-grid + .dt-analytics-card,
 .dt-analytics .dt-analytics-card + .dt-analytics-card {
@@ -332,6 +383,20 @@
   border-color: var(--app-border);
   color: var(--app-text);
 }
+[data-theme="dark"] .dt-analytics .dp-overview-stat {
+  background: var(--app-surface) !important;
+  border-color: var(--app-border) !important;
+}
+[data-theme="dark"] .dt-analytics .dp-overview-label {
+  color: #dbe6f6;
+}
+[data-theme="dark"] .dt-analytics .dt-change {
+  color: #9fb3d9;
+}
+[data-theme="dark"] .dt-analytics .dp-overview-icon {
+  background: var(--app-surface-3) !important;
+  border-color: var(--app-border) !important;
+}
 [data-theme="dark"] .dt-period-toggle {
   background: var(--app-surface-2);
 }
@@ -353,7 +418,15 @@
 /* -------------------------------------------------------------------------- */
 /*  Responsive                                                                 */
 /* -------------------------------------------------------------------------- */
+@media (max-width: 1200px) {
+  .dt-analytics .dp-stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
 @media (max-width: 720px) {
+  .dt-analytics .dp-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .dt-analytics .dp-header {
     flex-direction: column;
     align-items: stretch;
@@ -376,6 +449,12 @@
 }
 
 @media (max-width: 560px) {
+  .dt-analytics .dp-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .dt-analytics .dp-overview-value {
+    font-size: 24px;
+  }
   .ana-card-header {
     flex-direction: column;
     align-items: flex-start;

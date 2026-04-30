@@ -5,7 +5,6 @@ import "react-phone-number-input/style.css";
 import { clampPhoneNumber } from "./phoneClamp.js";
 import "./phone-field.css";
 
-
 export default function PhoneField({
   value,
   onChange,
@@ -23,8 +22,7 @@ export default function PhoneField({
     try {
       const p = parsePhoneNumber(raw, defaultCountry);
       if (p?.country) countryForClamp = p.country;
-    } catch {
-    }
+    } catch {}
     const clamped = clampPhoneNumber(raw, countryForClamp);
     onChange(clamped);
   };

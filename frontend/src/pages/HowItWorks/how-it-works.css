@@ -187,3 +187,48 @@
     align-items: flex-start;
   }
 }
+
+[data-theme="dark"] .hiw-page {
+  background: var(--app-bg);
+  color: var(--app-text-heading);
+}
+
+[data-theme="dark"] .hiw-section-alt {
+  background: var(--app-surface);
+}
+
+[data-theme="dark"] .hiw-head p,
+[data-theme="dark"] .hiw-card p {
+  color: var(--app-text);
+}
+
+[data-theme="dark"] .hiw-card {
+  background: var(--app-surface-2);
+  border-color: var(--app-border);
+  box-shadow: var(--app-shadow-sm);
+}
+
+[data-theme="dark"] .hiw-card h3 {
+  color: var(--app-text-heading);
+}
+
+[data-theme="dark"] .hiw-card-icon {
+  color: #bab5ff;
+  background: rgba(129, 140, 248, 0.16);
+}
+
+[data-theme="dark"] .hiw-cta-inner {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: var(--app-shadow-md);
+}
+
+[data-theme="dark"] .hiw-btn-primary {
+  background: var(--app-surface);
+  color: #e2e8ff;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+[data-theme="dark"] .hiw-btn-secondary {
+  border-color: rgba(255, 255, 255, 0.28);
+  color: #ffffff;
+}

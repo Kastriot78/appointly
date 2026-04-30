@@ -249,6 +249,56 @@ function StarRating({ rating, size = 14 }) {
   );
 }
 
+function BusinessProfileSkeleton() {
+  return (
+    <main className="bp-page bp-skel-page" aria-busy="true" aria-live="polite">
+      <section className="bp-skel-cover bp-skel-shimmer" />
+      <section className="bp-header-section">
+        <div className="container">
+          <div className="bp-header visible">
+            <div className="bp-skel-avatar bp-skel-shimmer" />
+            <div className="bp-header-info">
+              <div className="bp-skel-line bp-skel-line--tag bp-skel-shimmer" />
+              <div className="bp-skel-line bp-skel-line--title bp-skel-shimmer" />
+              <div className="bp-skel-meta-row">
+                <div className="bp-skel-line bp-skel-line--meta bp-skel-shimmer" />
+                <div className="bp-skel-line bp-skel-line--meta bp-skel-shimmer" />
+                <div className="bp-skel-line bp-skel-line--meta bp-skel-shimmer" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="bp-tabs-section">
+        <div className="container">
+          <div className="bp-tabs">
+            <span className="bp-skel-tab bp-skel-shimmer" />
+            <span className="bp-skel-tab bp-skel-shimmer" />
+            <span className="bp-skel-tab bp-skel-shimmer" />
+          </div>
+        </div>
+      </section>
+      <section className="bp-content bp-content-skel visible">
+        <div className="container">
+          <div className="bp-layout">
+            <div className="bp-main">
+              <div className="bp-services-list">
+                {Array.from({ length: 5 }).map((_, idx) => (
+                  <div key={idx} className="bp-skel-service-card bp-skel-shimmer" />
+                ))}
+              </div>
+            </div>
+            <aside className="bp-sidebar">
+              <div className="bp-skel-side-card bp-skel-shimmer" />
+              <div className="bp-skel-side-card bp-skel-shimmer" />
+            </aside>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
+
 const BusinessProfile = () => {
   const { id: slug } = useParams();
   const location = useLocation();
@@ -510,11 +560,7 @@ const BusinessProfile = () => {
   );
 
   if (loading) {
-    return (
-      <main className="bp-page bp-page--centered">
-        <p className="bp-loading-msg">Loading…</p>
-      </main>
-    );
+    return <BusinessProfileSkeleton />;
   }
 
   if (loadError === "notfound") {

@@ -578,7 +578,9 @@ async function getBusinessBySlugPublic(req, res) {
   const bid = business._id;
   const now = new Date();
   const [services, staffList, reviewDocs, closingRows] = await Promise.all([
-    Service.find({ business: bid, isActive: true }).sort({ name: 1 }).lean(),
+    Service.find({ business: bid, isActive: true })
+      .sort({ sortOrder: 1, createdAt: 1, name: 1 })
+      .lean(),
     Staff.find({ business: bid, isActive: true })
       .populate("services", "name price duration promotion")
       .sort({ name: 1 })
@@ -1175,7 +1177,7 @@ async function listPublicBusinesses(req, res) {
         business: { $in: ids },
         isActive: true,
       })
-        .sort({ name: 1 })
+        .sort({ sortOrder: 1, createdAt: 1, name: 1 })
         .lean(),
     ]);
     for (const row of countRows) {

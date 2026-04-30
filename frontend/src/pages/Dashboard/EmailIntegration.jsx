@@ -277,8 +277,8 @@ const EmailIntegration = () => {
                   {(customerCount ?? 0) === 1 ? "" : "s"} (anyone who has a
                   non-expired booking with this business).
                 </p>
-                <label className="dp-closing-field">
-                  <span>Subject</span>
+                <div className="dp-field full mb-3">
+                  <label>Subject</label>
                   <input
                     type="text"
                     className="form-control"
@@ -288,9 +288,9 @@ const EmailIntegration = () => {
                     maxLength={300}
                     autoComplete="off"
                   />
-                </label>
-                <label className="dp-closing-field">
-                  <span>Description</span>
+                </div>
+                <div className="dp-field full mb-3">
+                  <label>Description</label>
                   <textarea
                     className="form-control dp-closing-reason-textarea"
                     value={description}
@@ -299,7 +299,7 @@ const EmailIntegration = () => {
                     rows={8}
                     maxLength={20000}
                   />
-                </label>
+                </div>
                 <div className="dp-email-compose-actions">
                   <button
                     type="button"

@@ -22,6 +22,7 @@ import {
   updateService,
   deleteServiceApi,
   applyPromotionBulk,
+  reorderServices,
 } from "../../api/businesses";
 import { getApiErrorMessage } from "../../api/auth";
 import { useToast } from "../../components/ToastContext";
@@ -92,6 +93,9 @@ const ServicesManagement = () => {
   const [clearPromoModalOpen, setClearPromoModalOpen] = useState(false);
   const [editingService, setEditingService] = useState(null);
   const [bulkSubmitting, setBulkSubmitting] = useState(false);
+  const [reorderSaving, setReorderSaving] = useState(false);
+  const [draggingServiceId, setDraggingServiceId] = useState(null);
+  const [dragOverServiceId, setDragOverServiceId] = useState(null);
   const [businessCurrency, setBusinessCurrency] = useState("EUR");
   const [form, setForm] = useState({
     name: "",
@@ -139,6 +143,35 @@ const ServicesManagement = () => {
   }, [load]);
 
   const today = useMemo(() => todayIsoDate(), []);
+  const canReorder = user?.role === "tenant" && services.length > 1 && !loading;
+
+  const moveService = useCallback((rows, fromId, toId) => {
+    const from = rows.findIndex((s) => s.id === fromId);
+    const to = rows.findIndex((s) => s.id === toId);
+    if (from === -1 || to === -1 || from === to) return rows;
+    const copy = [...rows];
+    const [item] = copy.splice(from, 1);
+    copy.splice(to, 0, item);
+    return copy;
+  }, []);
+
+  const persistReorder = useCallback(
+    async (nextRows, prevRows) => {
+      setReorderSaving(true);
+      try {
+        await reorderServices(
+          businessId,
+          nextRows.map((s) => s.id),
+        );
+      } catch (err) {
+        setServices(prevRows);
+        showToast(getApiErrorMessage(err), "error");
+      } finally {
+        setReorderSaving(false);
+      }
+    },
+    [businessId, showToast],
+  );
 
   const promoSaleError = useMemo(() => {
     if (!form.promoEnabled) return null;
@@ -382,6 +415,12 @@ const ServicesManagement = () => {
               `${services.length} services · ${activeCount} active`
             )}
           </p>
+          {canReorder ? (
+            <p className="dp-subtitle" style={{ marginTop: 4 }}>
+              Drag cards to reorder services.
+              {reorderSaving ? " Saving order..." : ""}
+            </p>
+          ) : null}
         </div>
         {!loadError ? (
         <div className="dt-services-header-actions">
@@ -439,10 +478,45 @@ const ServicesManagement = () => {
           return (
             <div
               key={service.id}
-              className={`dt-service-card ${!service.isActive ? "inactive" : ""} ${pv ? "dt-service-card--promo" : ""}`}
+              className={`dt-service-card ${canReorder ? "dt-service-card--reorderable" : ""} ${!service.isActive ? "inactive" : ""} ${pv ? "dt-service-card--promo" : ""} ${draggingServiceId === service.id ? "dt-service-card--dragging" : ""} ${dragOverServiceId === service.id && draggingServiceId !== service.id ? "dt-service-card--drag-over" : ""}`}
+              draggable={canReorder}
+              onDragStart={(e) => {
+                if (!canReorder) return;
+                setDraggingServiceId(service.id);
+                setDragOverServiceId(service.id);
+                e.dataTransfer.effectAllowed = "move";
+                e.dataTransfer.setData("text/plain", service.id);
+              }}
+              onDragOver={(e) => {
+                if (!canReorder || !draggingServiceId) return;
+                e.preventDefault();
+                if (dragOverServiceId !== service.id) {
+                  setDragOverServiceId(service.id);
+                }
+              }}
+              onDrop={(e) => {
+                if (!canReorder || !draggingServiceId) return;
+                e.preventDefault();
+                const prev = services;
+                const next = moveService(prev, draggingServiceId, service.id);
+                setDraggingServiceId(null);
+                setDragOverServiceId(null);
+                if (next === prev) return;
+                setServices(next);
+                persistReorder(next, prev);
+              }}
+              onDragEnd={() => {
+                setDraggingServiceId(null);
+                setDragOverServiceId(null);
+              }}
             >
               <div className="dt-service-top">
                 <div>
+                  {canReorder ? (
+                    <span className="dt-service-drag-hint" aria-hidden>
+                      Drag to reorder
+                    </span>
+                  ) : null}
                   <h3>{service.name}</h3>
                   <p>{service.description || "—"}</p>
                 </div>

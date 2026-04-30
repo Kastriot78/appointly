@@ -498,7 +498,7 @@ const BusinessCustomers = () => {
                 <HiOutlineFilter size={18} aria-hidden />
                 <span>Focus (by completed visits)</span>
               </div>
-              <div className="dp-customers-focus-row">
+              <div className="dp-customers-focus-row align-items-center">
                 <div className="dp-customers-segment-wrap">
                   <CustomSelect
                     options={SEGMENT_OPTIONS}

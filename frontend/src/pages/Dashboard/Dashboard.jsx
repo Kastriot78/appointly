@@ -59,7 +59,7 @@ import "./dashboard.css";
 const customerLinks = [
   {
     to: "/dashboard",
-    label: "Overview",
+    label: "Dashboard",
     icon: (
       <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
         <rect
@@ -220,9 +220,10 @@ const Dashboard = () => {
   const userMenuRef = useRef(null);
   /** Admin — businesses waiting for approval (sidebar badge). */
   const [pendingApprovalCount, setPendingApprovalCount] = useState(0);
-  /** Tenant — multi-business workspace: loading | ready | pick */
+  /** Tenant — multi-business workspace: loading | ready | pick | empty */
   const [tenantWorkspaceState, setTenantWorkspaceState] = useState("loading");
   const [tenantWorkspaces, setTenantWorkspaces] = useState([]);
+  const [workspaceVersion, setWorkspaceVersion] = useState(0);
   const [activeWorkspaceId, setActiveWorkspaceId] = useState(() =>
     getStoredWorkspaceId(),
   );
@@ -259,7 +260,7 @@ const Dashboard = () => {
       return [
         {
           to: "/dashboard",
-          label: "Overview",
+          label: "Dashboard",
           icon: <HiOutlineViewGrid size={18} />,
           end: true,
         },
@@ -272,7 +273,7 @@ const Dashboard = () => {
     }
     const overview = {
       to: "/dashboard",
-      label: "Overview",
+      label: "Dashboard",
       icon: <HiOutlineViewGrid size={18} />,
       end: true,
     };
@@ -384,7 +385,7 @@ const Dashboard = () => {
         if (list.length === 0) {
           clearWorkspaceId();
           setActiveWorkspaceId(null);
-          setTenantWorkspaceState("ready");
+          setTenantWorkspaceState("empty");
           return;
         }
         if (list.length === 1) {
@@ -420,7 +421,20 @@ const Dashboard = () => {
     return () => {
       cancelled = true;
     };
-  }, [user, isTenantOwner, activeWorkspaceId]);
+  }, [user, isTenantOwner, activeWorkspaceId, workspaceVersion]);
+
+  useEffect(() => {
+    const onBusinessesChanged = () => {
+      setWorkspaceVersion((v) => v + 1);
+    };
+    window.addEventListener("appointly:businesses-changed", onBusinessesChanged);
+    return () => {
+      window.removeEventListener(
+        "appointly:businesses-changed",
+        onBusinessesChanged,
+      );
+    };
+  }, []);
 
   useEffect(() => {
     if (!isAdminRole(user?.role)) {
@@ -534,6 +548,9 @@ const Dashboard = () => {
     path === "/dashboard/profile" ||
     path === "/dashboard/businesses" ||
     path === "/dashboard/businesses/new";
+  const isCreateBusinessRoute = path === "/dashboard/businesses/new";
+  const showCreateWorkspaceModal =
+    isTenantOwner && tenantWorkspaceState === "empty" && !isCreateBusinessRoute;
 
   useEffect(() => {
     const root = document.getElementById("root");
@@ -642,7 +659,9 @@ const Dashboard = () => {
                           <span className="db-nav-icon">
                             <HiOutlineOfficeBuilding size={16} />
                           </span>
-                          <span>{b.name?.trim() || "Business"}</span>
+                          <span className="db-workspace-name">
+                            {b.name?.trim() || "Business"}
+                          </span>
                         </button>
                       );
                     })}
@@ -667,7 +686,7 @@ const Dashboard = () => {
                     <span className="db-nav-icon">
                       <HiOutlineOfficeBuilding size={16} />
                     </span>
-                    <span>
+                    <span className="db-workspace-name">
                       {tenantWorkspaces[0]?.name?.trim() || "Business"}
                     </span>
                   </button>
@@ -1325,7 +1344,8 @@ const Dashboard = () => {
               <p className="db-ws-loading-caption">Preparing your workspace…</p>
             </div>
           ) : isTenantOwner &&
-            tenantWorkspaceState === "pick" &&
+            (tenantWorkspaceState === "pick" ||
+              (tenantWorkspaceState === "empty" && !isAccountScopedRoute)) &&
             !isAccountScopedRoute ? null : (
             <Outlet
               context={{
@@ -1376,6 +1396,31 @@ const Dashboard = () => {
             >
               Log out
             </button>
+          </div>
+        </div>
+      ) : null}
+      {showCreateWorkspaceModal ? (
+        <div
+          className="db-ws-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="db-ws-empty-title"
+        >
+          <div className="db-ws-modal">
+            <h2 id="db-ws-empty-title">Create your first business</h2>
+            <p className="db-ws-sub">
+              You do not have a workspace yet. Create your first business to
+              start managing services, staff, and bookings from your dashboard.
+            </p>
+            <div className="db-ws-actions">
+              <Link
+                to="/dashboard/businesses/new"
+                className="db-ws-item db-ws-item--primary"
+              >
+                <HiOutlineOfficeBuilding size={20} aria-hidden />
+                <span>Create first business</span>
+              </Link>
+            </div>
           </div>
         </div>
       ) : null}
