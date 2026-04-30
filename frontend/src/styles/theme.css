@@ -1856,6 +1856,70 @@ body {
   color: #ffffff !important;
 }
 
+/* Dashboard workspace skeleton (loading state) */
+[data-theme="dark"] .db-ws-skel-stat,
+[data-theme="dark"] .db-ws-skel-panel {
+  background: var(--app-surface-2) !important;
+  border-color: var(--app-border) !important;
+}
+[data-theme="dark"] .db-skeleton {
+  background: linear-gradient(
+    110deg,
+    #1b2438 0%,
+    #1b2438 40%,
+    #25314a 50%,
+    #1b2438 60%,
+    #1b2438 100%
+  ) !important;
+}
+[data-theme="dark"] .db-ws-loading-caption {
+  color: #9fb0c8 !important;
+}
+
+/* Dashboard page error panel */
+[data-theme="dark"] .dp-error-panel {
+  border-color: rgba(239, 68, 68, 0.3) !important;
+  background: linear-gradient(
+    145deg,
+    rgba(38, 21, 27, 0.88) 0%,
+    rgba(30, 20, 25, 0.9) 48%,
+    rgba(24, 18, 23, 0.92) 100%
+  ) !important;
+  box-shadow:
+    0 1px 2px rgba(2, 6, 23, 0.4),
+    0 10px 30px rgba(127, 29, 29, 0.25) !important;
+}
+[data-theme="dark"] .dp-error-panel__icon-wrap {
+  background: linear-gradient(
+    145deg,
+    rgba(127, 29, 29, 0.35) 0%,
+    rgba(153, 27, 27, 0.3) 100%
+  ) !important;
+  border-color: rgba(248, 113, 113, 0.35) !important;
+}
+[data-theme="dark"] .dp-error-panel__icon {
+  color: #fda4af !important;
+}
+[data-theme="dark"] .dp-error-panel__title {
+  color: #fecaca !important;
+}
+[data-theme="dark"] .dp-error-panel__detail {
+  color: #ffd4d8 !important;
+}
+[data-theme="dark"] .dp-error-panel__hint {
+  color: #d6deef !important;
+}
+[data-theme="dark"] .dp-error-panel__retry {
+  background: var(--app-surface-2) !important;
+  border-color: var(--app-border) !important;
+  color: #bab5ff !important;
+}
+[data-theme="dark"] .dp-error-panel__retry:hover {
+  background: var(--app-surface-3) !important;
+  border-color: rgba(129, 140, 248, 0.42) !important;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.22) !important;
+}
+
 /* Generic dashboard surfaces ("dash-*", panels, cards) */
 [data-theme="dark"] [class^="dash-"][class*="card"],
 [data-theme="dark"] [class^="dash-"][class*="panel"],
