@@ -120,7 +120,7 @@ body
 }
 
 a {
-  text-decoration: none;
+  text-decoration: none !important;
   color: inherit;
 }
 
@@ -235,18 +235,13 @@ a {
 /* Mobile nav links – same hover effect */
 .mobile-nav__item a {
   position: relative;
-  background: linear-gradient(
-    269.32deg,
-    #ffbe1d 1.03%,
-    #00b4e5 44.14%,
-    #103254 99.87%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
+  color: #4f46e5;
+  background: none;
+  -webkit-text-fill-color: currentColor;
 }
 
 .mobile-nav__item a:hover {
-  -webkit-text-fill-color: transparent;
+  color: #4338ca;
 }
 
 .mobile-nav__item a::after {
@@ -256,14 +251,7 @@ a {
   right: 24px;
   bottom: 0;
   height: 1.5px;
-  background: linear-gradient(
-    90.54deg,
-    #002574 9.78%,
-    #0054a6 27.94%,
-    #0087e2 50.42%,
-    #00b4e5 72.99%,
-    #ffbb00 91.06%
-  );
+  background: #4f46e5;
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -273,7 +261,7 @@ a {
 }
 
 .mobile-nav__item a.active {
-  -webkit-text-fill-color: transparent;
+  color: #4338ca;
   font-weight: 600;
 }
 
@@ -712,6 +700,7 @@ button.header-user-dropdown__item:hover {
   padding: 14px 24px;
   font-size: 16px;
   font-weight: 400;
+  color: #08060d;
 }
 
 .mobile-nav__account {
@@ -4120,6 +4109,11 @@ footer.footer--modern {
   font-weight: 500;
 }
 
+.explore-price-input:is(:focus, :focus-visible) {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 .explore-price-dash {
   color: #94a3b8;
   font-weight: 600;
@@ -4305,9 +4299,15 @@ footer.footer--modern {
 .skeleton-line--medium {
   width: 68%;
 }
+
 .skeleton-line--long {
   width: 88%;
 }
+
+.business-card--skeleton .skeleton-line--medium {
+  margin-bottom: 12px;
+}
+
 .skeleton-line--price {
   width: 38px;
   height: 14px;
@@ -5014,7 +5014,6 @@ footer.footer--modern {
 
 .rm-text-section textarea {
   width: 100%;
-  font-size: 15px;
   color: #1e293b;
   background: #fff;
   border: 1.5px solid #e2e8f0;
@@ -7867,7 +7866,7 @@ footer.footer--modern {
   gap: 1rem;
   margin-top: 0.5rem;
   padding-top: 1rem;
-  border-top: 1px solid var(--app-border);
+  border-top: 0;
 }
 
 .ob-summary-thumb-wrap {
@@ -7884,13 +7883,13 @@ footer.footer--modern {
 .ob-summary-thumb--logo {
   width: 72px;
   height: 72px;
-  object-fit: contain;
+  object-fit: cover;
   background: var(--app-surface-2);
 }
 
 .ob-summary-thumb--cover {
   width: 120px;
-  height: 64px;
+  height: 72px;
   object-fit: cover;
 }
 
@@ -8550,6 +8549,12 @@ footer.footer--modern {
 
   .footer__heading {
     margin-bottom: 10px;
+  }
+
+  .explore-filter-toggle,
+  .explore-price-range,
+  .filter-select-wrapper {
+    width: 100%;
   }
 }
 

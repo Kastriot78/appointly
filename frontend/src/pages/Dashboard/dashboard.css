@@ -2818,4 +2818,18 @@ button.db-nav-link {
   .bmp-search-row {
     flex-direction: column;
   }
+
+  .dt-period-btn {
+    padding: 8px 5px;
+  }
+}
+
+@media (max-width: 345px) {
+  .dt-period-toggle {
+    justify-content: space-between;
+  }
+
+  .dt-period-btn {
+    flex: auto;
+  }
 }

@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Location = require("../models/Location");
 
 async function listLocations(_req, res) {
@@ -70,9 +71,68 @@ async function deleteLocation(req, res) {
   return res.json({ ok: true });
 }
 
+async function reorderLocations(req, res) {
+  const ids = Array.isArray(req.body?.orderedLocationIds)
+    ? req.body.orderedLocationIds.map((v) => String(v || "").trim()).filter(Boolean)
+    : [];
+  if (ids.length === 0) {
+    return res.status(400).json({ message: "orderedLocationIds is required" });
+  }
+  if (!ids.every((id) => mongoose.isValidObjectId(id))) {
+    return res
+      .status(400)
+      .json({ message: "orderedLocationIds contains invalid id" });
+  }
+  if (new Set(ids).size !== ids.length) {
+    return res
+      .status(400)
+      .json({ message: "orderedLocationIds must not contain duplicates" });
+  }
+
+  const rows = await Location.find({}, "_id").lean();
+  const existingIds = rows.map((r) => String(r._id));
+  if (existingIds.length !== ids.length) {
+    return res.status(400).json({
+      message:
+        "orderedLocationIds must contain every location id exactly once",
+    });
+  }
+  const existingSet = new Set(existingIds);
+  if (!ids.every((id) => existingSet.has(id))) {
+    return res.status(400).json({
+      message:
+        "orderedLocationIds must contain every location id exactly once",
+    });
+  }
+
+  const ops = ids.map((id, idx) => ({
+    updateOne: {
+      filter: { _id: id },
+      update: { $set: { sortOrder: idx } },
+    },
+  }));
+  if (ops.length > 0) {
+    await Location.bulkWrite(ops, { ordered: true });
+  }
+
+  const locations = await Location.find()
+    .sort({ sortOrder: 1, name: 1 })
+    .lean();
+  return res.json({
+    locations: locations.map((c) => ({
+      id: c._id.toString(),
+      name: c.name,
+      sortOrder: c.sortOrder,
+      createdAt: c.createdAt,
+      updatedAt: c.updatedAt,
+    })),
+  });
+}
+
 module.exports = {
   listLocations,
   createLocation,
   updateLocation,
   deleteLocation,
+  reorderLocations,
 };

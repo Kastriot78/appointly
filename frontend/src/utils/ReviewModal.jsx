@@ -195,6 +195,7 @@ const ReviewModal = ({
             <div className="rm-text-section">
               <label htmlFor="rm-textarea">Your Review</label>
               <textarea
+              className="form-control"
                 id="rm-textarea"
                 value={text}
                 onChange={(e) => setText(e.target.value)}

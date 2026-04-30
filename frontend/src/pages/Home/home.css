@@ -861,6 +861,21 @@
     0 0 0 1px rgba(129, 140, 248, 0.18);
 }
 
+[data-theme="dark"] .home-ft-card--skeleton {
+  background: linear-gradient(
+    90deg,
+    #1a2335 0%,
+    #273149 50%,
+    #1a2335 100%
+  );
+  background-size: 200% 100%;
+}
+
+[data-theme="dark"] .home-ft__skeleton--eyebrow,
+[data-theme="dark"] .home-ft__skeleton--title {
+  background: #2a3550;
+}
+
 [data-theme="dark"] .home-ft__link-all {
   color: #a5b4fc;
 }

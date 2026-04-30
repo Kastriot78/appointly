@@ -16,6 +16,13 @@ router.post(
 );
 
 router.put(
+  "/reorder",
+  authenticate,
+  requireAdmin,
+  asyncHandler(locationController.reorderLocations),
+);
+
+router.put(
   "/:id",
   authenticate,
   requireAdmin,

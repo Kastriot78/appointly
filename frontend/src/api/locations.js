@@ -15,3 +15,7 @@ export function updateLocation(id, body) {
 export function deleteLocation(id) {
   return http.delete(`/api/locations/${id}`);
 }
+
+export function reorderLocations(orderedLocationIds) {
+  return http.put("/api/locations/reorder", { orderedLocationIds });
+}

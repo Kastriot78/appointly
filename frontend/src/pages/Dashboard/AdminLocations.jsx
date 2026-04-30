@@ -8,6 +8,7 @@ import {
   createLocation,
   updateLocation,
   deleteLocation,
+  reorderLocations,
 } from "../../api/locations";
 import { useLocations } from "../../hooks/useLocations";
 import { isAdminRole } from "../../utils/roles";
@@ -28,8 +29,11 @@ const AdminLocations = () => {
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(emptyForm());
   const [saving, setSaving] = useState(false);
+  const [savingOrder, setSavingOrder] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const [draggingId, setDraggingId] = useState(null);
+  const [dragOverId, setDragOverId] = useState(null);
 
   const sorted = useMemo(
     () =>
@@ -126,6 +130,33 @@ const AdminLocations = () => {
     } finally {
       setDeletingId(null);
     }
+  };
+
+  const persistOrder = async (next) => {
+    setSavingOrder(true);
+    try {
+      await reorderLocations(next.map((x) => x.id));
+      await refetch();
+      showToast("Location order updated.", "success");
+    } catch (err) {
+      showToast(getApiErrorMessage(err), "error");
+      await refetch();
+    } finally {
+      setSavingOrder(false);
+    }
+  };
+
+  const moveLocation = (fromId, toId) => {
+    if (!fromId || !toId || fromId === toId) return;
+    const current = [...sorted];
+    const fromIndex = current.findIndex((c) => c.id === fromId);
+    const toIndex = current.findIndex((c) => c.id === toId);
+    if (fromIndex < 0 || toIndex < 0) return;
+    const next = [...current];
+    const [moved] = next.splice(fromIndex, 1);
+    next.splice(toIndex, 0, moved);
+    const normalized = next.map((row, idx) => ({ ...row, sortOrder: idx }));
+    persistOrder(normalized);
   };
 
   const deleteModal =
@@ -277,14 +308,48 @@ const AdminLocations = () => {
             </thead>
             <tbody>
               {sorted.map((c) => (
-                <tr key={c.id}>
+                <tr
+                  key={c.id}
+                  draggable={!savingOrder}
+                  onDragStart={(e) => {
+                    if (savingOrder) return;
+                    setDraggingId(c.id);
+                    e.dataTransfer.effectAllowed = "move";
+                    e.dataTransfer.setData("text/plain", c.id);
+                  }}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    if (dragOverId !== c.id) setDragOverId(c.id);
+                    e.dataTransfer.dropEffect = "move";
+                  }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    const fromId = e.dataTransfer.getData("text/plain");
+                    moveLocation(fromId, c.id);
+                    setDragOverId(null);
+                    setDraggingId(null);
+                  }}
+                  onDragEnd={() => {
+                    setDragOverId(null);
+                    setDraggingId(null);
+                  }}
+                  className={`ac-row--draggable${draggingId === c.id ? " ac-row--dragging" : ""}${dragOverId === c.id ? " ac-row--drag-over" : ""}`}
+                >
                   <td>{c.sortOrder ?? 0}</td>
                   <td>{c.name}</td>
                   <td className="ac-actions">
+                    <span
+                      className="ac-drag-handle"
+                      title="Drag to reorder"
+                      aria-label="Drag to reorder"
+                    >
+                      ⋮⋮
+                    </span>
                     <button
                       type="button"
                       className="ac-icon-btn"
                       onClick={() => openEdit(c)}
+                      disabled={savingOrder}
                       aria-label="Edit"
                     >
                       <HiOutlinePencil size={18} />
@@ -293,7 +358,7 @@ const AdminLocations = () => {
                       type="button"
                       className="ac-icon-btn ac-icon-btn--danger"
                       onClick={() => setDeleteTarget(c)}
-                      disabled={Boolean(deletingId)}
+                      disabled={Boolean(deletingId) || savingOrder}
                       aria-label="Delete"
                     >
                       <HiOutlineTrash size={18} />

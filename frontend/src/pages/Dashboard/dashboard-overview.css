@@ -887,9 +887,9 @@
     min-width: 0;
   }
 
-  .dp-top-customers-table {
+  /* .dp-top-customers-table {
     min-width: 520px;
-  }
+  } */
 }
 
 @media (max-width: 500px) {
