@@ -825,6 +825,10 @@ const BusinessEdit = () => {
         {/* Working Hours */}
         {activeTab === "hours" && (
           <div className="be-section">
+            <p className="ob-step-desc" style={{ marginBottom: 10 }}>
+              Overnight is supported: set closing time earlier than opening
+              (example: 18:00 to 02:00). For midnight, use 00:00.
+            </p>
             <div className="be-hours-list">
               {hours.map((h, i) => (
                 <div
@@ -852,23 +856,25 @@ const BusinessEdit = () => {
                   {h.active ? (
                     <div className="be-time-inputs">
                       <input
-                        type="time"
+                        type="text"
                         value={h.open}
                         onChange={(e) => {
                           const u = [...hours];
                           u[i] = { ...u[i], open: e.target.value };
                           setHours(u);
                         }}
+                        placeholder="09:00"
                       />
                       <span>to</span>
                       <input
-                        type="time"
+                        type="text"
                         value={h.close}
                         onChange={(e) => {
                           const u = [...hours];
                           u[i] = { ...u[i], close: e.target.value };
                           setHours(u);
                         }}
+                        placeholder="24:00"
                       />
                     </div>
                   ) : (

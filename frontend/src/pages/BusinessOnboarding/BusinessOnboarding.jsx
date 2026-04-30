@@ -629,6 +629,10 @@ const BusinessOnboarding = () => {
                   <p className="ob-step-desc">
                     Clients can only book during these hours
                   </p>
+                  <p className="ob-step-desc">
+                    Overnight is supported: set closing time earlier than opening
+                    (example: 18:00 to 02:00). For midnight, use 00:00.
+                  </p>
 
                   <div className="ob-hours-list">
                     {hours.map((h, i) => (
@@ -653,19 +657,21 @@ const BusinessOnboarding = () => {
                         {h.active ? (
                           <div className="ob-time-inputs">
                             <input
-                              type="time"
+                              type="text"
                               value={h.open}
                               onChange={(e) =>
                                 updateHour(i, "open", e.target.value)
                               }
+                              placeholder="09:00"
                             />
                             <span className="ob-time-sep">to</span>
                             <input
-                              type="time"
+                              type="text"
                               value={h.close}
                               onChange={(e) =>
                                 updateHour(i, "close", e.target.value)
                               }
+                              placeholder="24:00"
                             />
                           </div>
                         ) : (

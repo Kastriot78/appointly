@@ -75,7 +75,7 @@ const Footer = () => {
                   type="email"
                   id="footerNewsletterEmail"
                   name="email"
-                  className={`footer__input ${error ? "footer__input--error" : ""}`}
+                  className={`form-control footer__input ${error ? "footer__input--error" : ""}`}
                   value={email}
                   onChange={handleChange}
                   placeholder="you@example.com"

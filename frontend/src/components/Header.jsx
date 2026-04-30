@@ -52,7 +52,7 @@ const Header = () => {
     user && ((user.email || user.pendingEmail || "").trim() || null);
 
   return (
-    <header className={`header${isScrolled ? " header--scrolled" : ""}`}>
+    <header className={`header`}>
       <div className="container">
         <div className="wrapper">
           <Link to="/" className="header-logo">

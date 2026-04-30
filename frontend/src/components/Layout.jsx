@@ -1,17 +1,23 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Header from "./Header";
 import ScrollToTop from "./ScrollToTop";
 import "./ScrollToTop.css";
 import Footer from "./Footer";
 
-const Layout = () => (
-  <>
-    <Header />
-    <div className="header-spacer" aria-hidden="true" />
-    <Outlet />
-    <Footer />
-    <ScrollToTop />
-  </>
-);
+const Layout = () => {
+  const location = useLocation();
+  const isDashboardRoute = location.pathname.startsWith("/dashboard");
 
-export default Layout
+  return (
+    <>
+      <Header />
+      <main className={`app-main${isDashboardRoute ? " app-main--dashboard" : ""}`}>
+        <Outlet />
+      </main>
+      <Footer />
+      <ScrollToTop />
+    </>
+  );
+};
+
+export default Layout;
