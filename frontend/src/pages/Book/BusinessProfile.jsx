@@ -60,6 +60,7 @@ function parseTimeToMinutes(timeStr) {
   if (!m) return null;
   const h = parseInt(m[1], 10);
   const min = parseInt(m[2], 10);
+  if (h === 24 && min === 0) return 24 * 60;
   if (
     Number.isNaN(h) ||
     Number.isNaN(min) ||
@@ -73,18 +74,34 @@ function parseTimeToMinutes(timeStr) {
   return h * 60 + min;
 }
 
-/** Open only if today is active and current time ∈ [open, close) in local time. */
-function isCurrentlyOpenFromRow(todayRow) {
-  if (!todayRow || todayRow.active !== true) return false;
-  const openM = parseTimeToMinutes(todayRow.open);
-  const closeM = parseTimeToMinutes(todayRow.close);
-  if (openM === null || closeM === null) return false;
+function isBusinessOpenNow(workingHours) {
+  if (!Array.isArray(workingHours) || workingHours.length === 0) return false;
   const now = new Date();
+  const todayIndex = now.getDay();
   const nowM = now.getHours() * 60 + now.getMinutes();
-  if (closeM <= openM) {
-    return nowM >= openM || nowM < closeM;
+  const todayName = DAY_NAMES[todayIndex];
+  const yesterdayName = DAY_NAMES[(todayIndex + 6) % 7];
+  const todayRow = workingHours.find((h) => h.day === todayName);
+  const yesterdayRow = workingHours.find((h) => h.day === yesterdayName);
+
+  if (todayRow?.active === true) {
+    const openM = parseTimeToMinutes(todayRow.open);
+    const closeM = parseTimeToMinutes(todayRow.close);
+    if (openM !== null && closeM !== null) {
+      if (closeM > openM && nowM >= openM && nowM < closeM) return true;
+      if (closeM <= openM && nowM >= openM) return true;
+    }
   }
-  return nowM >= openM && nowM < closeM;
+
+  if (yesterdayRow?.active === true) {
+    const yOpen = parseTimeToMinutes(yesterdayRow.open);
+    const yClose = parseTimeToMinutes(yesterdayRow.close);
+    if (yOpen !== null && yClose !== null && yClose <= yOpen && nowM < yClose) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 function getTodaySchedule(workingHours) {
@@ -95,7 +112,7 @@ function getTodaySchedule(workingHours) {
     ? workingHours.find((h) => h.day === todayName)
     : undefined;
   const todayHours = display.find((h) => h.day === todayName);
-  const isOpen = isCurrentlyOpenFromRow(todayRow);
+  const isOpen = isBusinessOpenNow(workingHours);
   return { isOpen, todayHours, todayName };
 }
 

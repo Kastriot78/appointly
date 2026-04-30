@@ -1573,14 +1573,14 @@ footer.footer--modern {
 }
 
 .footer__input {
-  flex: 1;
-  min-width: 180px;
-  padding: 14px 16px;
-  border-radius: 6px;
-  border: 1px solid #e2e8f0;
-  background: #f8fafc;
-  color: #0f172a;
-  outline: none;
+  flex: 1 !important;
+  min-width: 180px !important;
+  padding: 14px 16px !important;
+  border-radius: 6px !important;
+  border: 1px solid #e2e8f0 !important;
+  background: #f8fafc !important;
+  color: #0f172a !important;
+  outline: none !important;
   transition:
     border-color 0.2s,
     box-shadow 0.2s,
@@ -8158,6 +8158,10 @@ footer.footer--modern {
 
   .filters-right {
     justify-content: space-between;
+  }
+
+  .footer__newsletter-copy {
+    width: 100%;
   }
 }
 

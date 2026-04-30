@@ -41,6 +41,19 @@
   z-index: 10;
   padding-bottom: 0;
 }
+
+.bp-skel-page .bp-header-section {
+  margin-top: 18px;
+}
+
+.bp-skel-page .bp-skel-meta-row {
+  flex-wrap: wrap;
+}
+
+.bp-skel-page .bp-tabs {
+  margin-bottom: 14px;
+}
+
 .bp-header {
   display: flex;
   gap: 24px;
@@ -1050,9 +1063,9 @@
     margin-top: -36px;
   }
 
-  .bp-tabs {
+  /* .bp-tabs {
     gap: 0;
-  }
+  } */
   .bp-tab {
     padding: 12px 16px;
     font-size: 13px;
