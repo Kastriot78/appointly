@@ -16,7 +16,7 @@ router.post(
   "/register",
   authRateLimiter,
   requireJsonBody,
-  requireFields(["name", "email", "password"]),
+  requireFields(["name", "email", "password", "confirmPassword"]),
   asyncHandler(authController.register),
 );
 router.post(

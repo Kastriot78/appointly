@@ -35,6 +35,7 @@ Thumbs.db
 # Local project notes (user-specific)
 .txt
 .description
+.deploy-vercel
 webhooku-sifunksionon
 WEBHOOKS.md
 other-features

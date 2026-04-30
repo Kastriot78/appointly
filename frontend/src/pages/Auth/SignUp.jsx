@@ -35,6 +35,7 @@ const SignUp = () => {
     name: "",
     email: "",
     password: "",
+    confirmPassword: "",
     businessName: "",
   });
   const [focusedField, setFocusedField] = useState(null);
@@ -78,6 +79,8 @@ const SignUp = () => {
         formData.name &&
         formData.email &&
         formData.password.length >= 6 &&
+        formData.confirmPassword &&
+        formData.password === formData.confirmPassword &&
         (role === "customer" || formData.businessName),
       ),
     [formData, role],
@@ -93,6 +96,7 @@ const SignUp = () => {
         name: normalizePersonName(formData.name),
         email: formData.email.trim().toLowerCase(),
         password: formData.password,
+        confirmPassword: formData.confirmPassword,
         /* Backend stores business signups as role "tenant" (not "business"). */
         role: role === "business" ? "tenant" : "customer",
       });
@@ -412,6 +416,52 @@ const SignUp = () => {
                       Password looks good
                     </span>
                   )}
+                </div>
+
+                <div
+                  className={`auth-field ${focusedField === "confirmPassword" ? "focused" : ""} ${formData.confirmPassword ? "filled" : ""}`}
+                >
+                  <label htmlFor="su-confirm-password">Confirm Password</label>
+                  <div className="auth-input-wrapper">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                      <rect
+                        x="3"
+                        y="8"
+                        width="12"
+                        height="8"
+                        rx="2"
+                        stroke="currentColor"
+                        strokeWidth="1.3"
+                      />
+                      <path
+                        d="M6 8V5.5C6 3.84 7.34 2.5 9 2.5C10.66 2.5 12 3.84 12 5.5V8"
+                        stroke="currentColor"
+                        strokeWidth="1.3"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      id="su-confirm-password"
+                      name="confirmPassword"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      onFocus={() => setFocusedField("confirmPassword")}
+                      onBlur={() => setFocusedField(null)}
+                      placeholder="Re-enter your password"
+                      required
+                      disabled={registerLoading}
+                      autoComplete="new-password"
+                    />
+                  </div>
+                  {formData.confirmPassword &&
+                    formData.password !== formData.confirmPassword && (
+                      <span className="auth-hint warn">Passwords do not match</span>
+                    )}
+                  {formData.confirmPassword &&
+                    formData.password === formData.confirmPassword && (
+                      <span className="auth-hint success">Passwords match</span>
+                    )}
                 </div>
 
                 {role === "business" && (

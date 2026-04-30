@@ -48,6 +48,37 @@ const stepLabels = [
 const CATEGORY_SKELETON_COUNT = 8;
 const SIGNUP_BUSINESS_DRAFT_KEY = "appointly:signupBusinessDraft";
 
+function getBusinessSubmitErrorMessage(err) {
+  const data = err?.response?.data;
+  const status = err?.response?.status;
+  const statusText = String(err?.response?.statusText || "").trim();
+
+  const message =
+    (typeof data?.message === "string" && data.message.trim()) ||
+    (typeof data?.error === "string" && data.error.trim()) ||
+    (Array.isArray(data?.errors) && data.errors[0]
+      ? String(data.errors[0]).trim()
+      : "");
+
+  const details =
+    typeof data?.details === "string" ? data.details.trim() : "";
+
+  if (message && details && details !== message) {
+    return `${message} (${details})`;
+  }
+  if (message) return message;
+
+  if (status) {
+    return `Business creation failed (HTTP ${status}${statusText ? ` ${statusText}` : ""}). Please check backend logs and request data.`;
+  }
+
+  if (err?.request && !err?.response) {
+    return "Could not reach the server while creating the business. Check API URL, CORS, and network.";
+  }
+
+  return "Business creation failed. Check backend logs for more details.";
+}
+
 const BusinessOnboarding = () => {
   const navigate = useNavigate();
   const { user } = useOutletContext();
@@ -319,7 +350,7 @@ const BusinessOnboarding = () => {
       }
       navigate("/dashboard/businesses", { replace: true });
     } catch (err) {
-      const msg = getApiErrorMessage(err);
+      const msg = getBusinessSubmitErrorMessage(err);
       setSubmitError(msg);
       showToast(msg, "error");
     } finally {

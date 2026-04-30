@@ -29,7 +29,7 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PUBLIC_ROLES = ["customer", "tenant"];
 
 function validateRegisterBody(body) {
-  const { name, email, password, role, phone, avatar } = body;
+  const { name, email, password, confirmPassword, role, phone, avatar } = body;
   const errors = [];
 
   if (!name || String(name).trim().length < 1) {
@@ -40,6 +40,11 @@ function validateRegisterBody(body) {
   }
   if (!password || String(password).length < 6) {
     errors.push("Password must be at least 6 characters");
+  }
+  if (!confirmPassword || String(confirmPassword).length < 1) {
+    errors.push("Confirm password is required");
+  } else if (String(password || "") !== String(confirmPassword)) {
+    errors.push("Passwords do not match");
   }
 
   let roleValue = "customer";
@@ -62,6 +67,7 @@ function validateRegisterBody(body) {
         .trim()
         .toLowerCase(),
       password: String(password || ""),
+      confirmPassword: String(confirmPassword || ""),
       role: roleValue,
       phone: phone != null ? String(phone).trim() : "",
       avatar: avatar != null ? String(avatar).trim() : "",
