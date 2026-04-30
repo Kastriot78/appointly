@@ -1,16 +1,16 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { HelmetProvider } from 'react-helmet-async'
-import './index.css'
-import App from './App.jsx'
-import { ThemeProvider } from './theme/ThemeContext'
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './styles/global.css';
-import './styles/app-tooltip.css';
-import './styles/theme.css';
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { HelmetProvider } from "react-helmet-async";
+import "./index.css";
+import App from "./App.jsx";
+import { ThemeProvider } from "./theme/ThemeContext";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./styles/global.css";
+import "./styles/app-tooltip.css";
+import "./styles/theme.css";
 import { flushOfflineQueue } from "./api/http";
 
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById("root")).render(
   <StrictMode>
     <HelmetProvider>
       <ThemeProvider>
@@ -18,7 +18,7 @@ createRoot(document.getElementById('root')).render(
       </ThemeProvider>
     </HelmetProvider>
   </StrictMode>,
-)
+);
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", async () => {

@@ -47,7 +47,7 @@ async function normalizeReviewStaffField() {
   }
 }
 
-const connectDB = async () => {
+const connectDB = async ({ exitOnError = true } = {}) => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
     console.log("MongoDB connected");
@@ -65,7 +65,10 @@ const connectDB = async () => {
     console.log("Business-related indexes synced");
   } catch (err) {
     console.error("MongoDB connection error:", err);
-    process.exit(1);
+    if (exitOnError) {
+      process.exit(1);
+    }
+    throw err;
   }
 };
 
