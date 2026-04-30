@@ -26,6 +26,7 @@ import { getPromotionView, todayIsoDate } from "../../utils/servicePromotion";
 import { formatMoneyCompact, normalizeCurrency } from "../../utils/currency";
 import { useAuth } from "../../auth/AuthContext";
 import CustomerServiceSuggestions from "../Dashboard/CustomerServiceSuggestions";
+import "./style.css";
 
 const sortOptions = [
   { value: "recommended", label: "Recommended" },

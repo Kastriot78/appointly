@@ -24,6 +24,7 @@ const {
   TWO_FACTOR_MAX_ATTEMPTS,
   TWO_FACTOR_RESEND_COOLDOWN_MS,
 } = require("../utils/twoFactor");
+const { getPublicSiteBase } = require("../utils/sitePublicUrl");
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PUBLIC_ROLES = ["customer", "tenant"];
@@ -459,11 +460,7 @@ async function forgotPassword(req, res) {
   user.passwordResetExpires = new Date(Date.now() + 60 * 60 * 1000);
   await user.save();
 
-  const base =
-    process.env.FRONTEND_URL ||
-    process.env.CLIENT_URL ||
-    "http://localhost:5173";
-  const resetUrl = `${String(base).replace(/\/$/, "")}/reset-password?token=${encodeURIComponent(plainToken)}&email=${encodeURIComponent(user.email)}`;
+  const resetUrl = `${getPublicSiteBase()}/reset-password?token=${encodeURIComponent(plainToken)}&email=${encodeURIComponent(user.email)}`;
 
   try {
     await sendPasswordResetEmail(user.email, user.name || "there", resetUrl);

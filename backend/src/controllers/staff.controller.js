@@ -15,6 +15,7 @@ const {
   assertStaffCapacity,
   assertBusinessFeature,
 } = require("../utils/subscriptionEnforcement");
+const { getPublicSiteBase } = require("../utils/sitePublicUrl");
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -347,11 +348,7 @@ async function inviteStaffDashboard(req, res) {
   );
   await member.save();
   const biz = await Business.findById(businessId).select("name").lean();
-  const base = (
-    process.env.FRONTEND_URL ||
-    process.env.APP_PUBLIC_URL ||
-    "http://localhost:5173"
-  ).replace(/\/$/, "");
+  const base = getPublicSiteBase();
   const inviteUrl = `${base}/staff-invite?token=${encodeURIComponent(token)}`;
   await sendStaffDashboardInviteEmail({
     to: email,

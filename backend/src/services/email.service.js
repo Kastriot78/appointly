@@ -5,6 +5,7 @@ const {
   buildAppointlyEmailDocument,
   footerParagraph,
 } = require("./emailLayout.service");
+const { getPublicSiteBase } = require("../utils/sitePublicUrl");
 
 /**
  * Supports both names: SMTP_* (standard) and EMAIL_* (common in tutorials).
@@ -324,12 +325,7 @@ async function sendTwoFactorEmail(to, name, code, purpose) {
 }
 
 function appBaseUrl() {
-  return (
-    process.env.FRONTEND_URL ||
-    process.env.APP_PUBLIC_URL ||
-    process.env.CLIENT_URL ||
-    "http://localhost:5173"
-  ).replace(/\/$/, "");
+  return getPublicSiteBase();
 }
 
 /**

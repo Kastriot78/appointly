@@ -7,6 +7,7 @@ const {
   buildAppointlyEmailDocument,
   footerParagraph,
 } = require("./emailLayout.service");
+const { getPublicSiteBase } = require("../utils/sitePublicUrl");
 
 function resolveSmtpEnv() {
   const host =
@@ -191,12 +192,7 @@ async function sendTenantCustomerBookingNotices(p) {
 }
 
 function appBaseUrl() {
-  return (
-    process.env.FRONTEND_URL ||
-    process.env.APP_PUBLIC_URL ||
-    process.env.CLIENT_URL ||
-    "http://localhost:5173"
-  ).replace(/\/$/, "");
+  return getPublicSiteBase();
 }
 
 /**

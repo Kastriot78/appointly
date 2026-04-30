@@ -15,6 +15,7 @@ const {
 } = require("../utils/couponValidation");
 const { sendCouponOfferEmail } = require("../services/bookingEmail.service");
 const { assertBusinessFeature } = require("../utils/subscriptionEnforcement");
+const { getPublicSiteBase } = require("../utils/sitePublicUrl");
 
 async function assertManageCoupon(req, businessId) {
   if (!mongoose.isValidObjectId(businessId)) {
@@ -58,11 +59,7 @@ async function getDistinctCustomerEmailsForBusiness(businessId) {
 }
 
 function buildCouponMailContext(business, coupon) {
-  const base = (
-    process.env.FRONTEND_URL ||
-    process.env.CLIENT_URL ||
-    "http://localhost:5173"
-  ).replace(/\/$/, "");
+  const base = getPublicSiteBase();
   const slug = business.slug ? String(business.slug).trim() : "";
   return {
     businessName: business.name || "A business",

@@ -18,6 +18,7 @@ const {
 } = require("../utils/businessAccess");
 const { geocodeAddress } = require("../services/geocoding.service");
 const { sendBusinessApprovedEmail } = require("../services/email.service");
+const { getPublicSiteBase } = require("../utils/sitePublicUrl");
 const { normalizeCurrency } = require("../utils/currency");
 const {
   normalizeTenantNotificationPrefsPatch,
@@ -1263,12 +1264,7 @@ async function setBusinessApproval(req, res) {
   await business.save();
 
   if (business.isApproved === true && wasNotApproved) {
-    const publicBase = (
-      process.env.FRONTEND_URL ||
-      process.env.APP_PUBLIC_URL ||
-      process.env.CLIENT_URL ||
-      "http://localhost:5173"
-    ).replace(/\/$/, "");
+    const publicBase = getPublicSiteBase();
     const slug = String(business.slug || "").trim();
     const publicProfileUrl = slug
       ? `${publicBase}/book/${encodeURIComponent(slug)}`
