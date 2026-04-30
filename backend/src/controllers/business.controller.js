@@ -26,6 +26,7 @@ const { parseYmdParts } = require("../utils/bookingAvailability");
 const {
   filterBusinessIdsWithAvailability,
 } = require("../services/publicDiscoverAvailability.service");
+const { uploadImageFile } = require("../services/cloudinary.service");
 const { assertBusinessFeature } = require("../utils/subscriptionEnforcement");
 
 const BACKEND_ROOT = path.join(__dirname, "..", "..");
@@ -369,11 +370,20 @@ async function createBusiness(req, res) {
   let logoPath = String(body.logo ?? "").trim();
   let coverPath = String(body.cover ?? "").trim();
 
-  if (req.files?.logo?.[0]?.filename) {
-    logoPath = `/images/businesses/${req.files.logo[0].filename}`;
+  if (req.files?.logo?.[0]) {
+    logoPath = await uploadImageFile(req.files.logo[0], "appointly/businesses/logo");
   }
-  if (req.files?.cover?.[0]?.filename) {
-    coverPath = `/images/businesses/${req.files.cover[0].filename}`;
+  if (req.files?.cover?.[0]) {
+    coverPath = await uploadImageFile(
+      req.files.cover[0],
+      "appointly/businesses/cover",
+    );
+  }
+
+  if (!logoPath || !coverPath) {
+    return res.status(400).json({
+      message: "Logo and cover images are required",
+    });
   }
 
   const n = String(name || "").trim();
