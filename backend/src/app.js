@@ -1,12 +1,26 @@
 const path = require("path");
 const express = require("express");
 const helmet = require("helmet");
+const mongoose = require("mongoose");
 const corsAllow = require("./middleware/corsAllow");
 const errorHandler = require("./middleware/errorHandler");
 const asyncHandler = require("./utils/asyncHandler");
 const seoController = require("./controllers/seo.controller");
 
 const app = express();
+
+function getMongoHost() {
+  const uri = String(process.env.MONGO_URI || "").trim();
+  if (!uri) return null;
+  // mongodb+srv://user:pass@host/db?...
+  // mongodb://user:pass@host:port/db?...
+  const afterScheme = uri.replace(/^mongodb(\+srv)?:\/\//i, "");
+  const afterAuth = afterScheme.includes("@")
+    ? afterScheme.split("@").slice(1).join("@")
+    : afterScheme;
+  const host = afterAuth.split("/")[0]?.trim() || "";
+  return host || null;
+}
 
 app.disable("x-powered-by");
 app.set("trust proxy", 1);
@@ -51,12 +65,40 @@ app.use(
 );
 
 /** Quick check you’re hitting this API (returns JSON, not HTML). */
+app.get("/", (req, res) => {
+  const dbName =
+    mongoose.connection?.db?.databaseName ||
+    mongoose.connection?.name ||
+    null;
+  const dbHost = getMongoHost();
+  res.json({
+    ok: true,
+    message: "Appointly backend API is running.",
+    health: "/api/health",
+    db: {
+      connected: mongoose.connection?.readyState === 1,
+      name: dbName,
+      host: dbHost,
+    },
+  });
+});
+
 app.get("/api/health", (req, res) => {
+  const dbName =
+    mongoose.connection?.db?.databaseName ||
+    mongoose.connection?.name ||
+    null;
+  const dbHost = getMongoHost();
   res.json({
     ok: true,
     service: "appointly-api",
     env: process.env.NODE_ENV || "development",
     uptimeSec: Math.round(process.uptime()),
+    db: {
+      connected: mongoose.connection?.readyState === 1,
+      name: dbName,
+      host: dbHost,
+    },
   });
 });
 
