@@ -15,10 +15,7 @@ const storage = multer.diskStorage({
     const ext = path.extname(file.originalname || "").toLowerCase();
     const allowed = [".jpg", ".jpeg", ".png", ".gif", ".webp", ".avif"];
     const safe = allowed.includes(ext) ? ext : ".jpg";
-    cb(
-      null,
-      `${Date.now()}-${crypto.randomBytes(8).toString("hex")}${safe}`,
-    );
+    cb(null, `${Date.now()}-${crypto.randomBytes(8).toString("hex")}${safe}`);
   },
 });
 

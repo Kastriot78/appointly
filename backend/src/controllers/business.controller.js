@@ -492,7 +492,9 @@ async function listBusinesses(req, res) {
         : [];
     const [users, svcAgg, stfAgg, bookingAgg] = await Promise.all([
       ownerIds.length > 0
-        ? User.find({ _id: { $in: ownerIds } }).select("name email").lean()
+        ? User.find({ _id: { $in: ownerIds } })
+            .select("name email")
+            .lean()
         : Promise.resolve([]),
       Service.aggregate([
         { $match: { business: { $in: ids } } },
@@ -1399,12 +1401,13 @@ async function getCustomerServiceHistory(req, res) {
         price: Number(s.price) || 0,
       }));
     const primaryName =
-      String(svc?.name || "").trim() ||
-      servicesOut[0]?.name ||
-      "Service";
+      String(svc?.name || "").trim() || servicesOut[0]?.name || "Service";
     const servicesLabel =
       servicesOut.length > 1
-        ? servicesOut.map((s) => s.name).filter(Boolean).join(" + ")
+        ? servicesOut
+            .map((s) => s.name)
+            .filter(Boolean)
+            .join(" + ")
         : primaryName;
     const services =
       servicesOut.length > 0

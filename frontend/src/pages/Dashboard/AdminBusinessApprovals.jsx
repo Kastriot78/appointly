@@ -487,7 +487,7 @@ const AdminBusinessApprovals = () => {
         {loading ? (
           <DashboardSkeletonTable cols={6} rows={6} />
         ) : sorted.length === 0 ? (
-          <p className="ac-muted">No businesses yet.</p>
+          <p className="ac-muted ps-3 pe-3">No businesses yet.</p>
         ) : filteredBusinesses.length === 0 ? (
           <p className="ac-muted text-center">No businesses match your search.</p>
         ) : (

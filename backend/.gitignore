@@ -1,5 +1,9 @@
 node_modules/
 uploads/
-images/
+images/*
+!images/.gitkeep
+!images/businesses/
+images/businesses/*
+!images/businesses/.gitkeep
 .env
 *.log
