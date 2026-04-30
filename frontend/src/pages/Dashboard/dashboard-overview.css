@@ -604,7 +604,9 @@
   font-weight: 700;
   color: var(--app-primary);
   text-decoration: none;
-  transition: color 0.2s ease, gap 0.2s ease;
+  transition:
+    color 0.2s ease,
+    gap 0.2s ease;
 }
 
 .dp-next-cta:hover {
@@ -887,9 +889,31 @@
     min-width: 0;
   }
 
-  /* .dp-top-customers-table {
-    min-width: 520px;
-  } */
+  .dp-top-customers-table {
+    min-width: 560px;
+    width: 100%;
+    table-layout: auto;
+  }
+
+  .dp-top-customers-table th,
+  .dp-top-customers-table td {
+    white-space: nowrap;
+    word-break: normal;
+  }
+
+  .dp-top-customers-name,
+  .dp-top-customers-email {
+    max-width: none;
+    white-space: nowrap;
+    overflow: visible;
+    text-overflow: clip;
+    word-break: normal;
+  }
+
+  .dp-top-customers-num,
+  .dp-top-customers-table th.dp-top-customers-num {
+    text-align: right;
+  }
 }
 
 @media (max-width: 500px) {

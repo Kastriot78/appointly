@@ -862,12 +862,7 @@
 }
 
 [data-theme="dark"] .home-ft-card--skeleton {
-  background: linear-gradient(
-    90deg,
-    #1a2335 0%,
-    #273149 50%,
-    #1a2335 100%
-  );
+  background: linear-gradient(90deg, #1a2335 0%, #273149 50%, #1a2335 100%);
   background-size: 200% 100%;
 }
 
@@ -892,4 +887,22 @@
 
 [data-theme="dark"] .feature-card .card-description {
   color: #e2e8f0 !important;
+}
+
+@media (max-width: 991px) {
+  .home-ft__scroll {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .home-ft__scroll {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 575px) {
+  .home-ft__scroll {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }

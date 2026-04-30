@@ -11,7 +11,9 @@ const Layout = () => {
   return (
     <>
       <Header />
-      <main className={`app-main${isDashboardRoute ? " app-main--dashboard" : ""}`}>
+      <main
+        className={`app-main${isDashboardRoute ? " app-main--dashboard" : ""}`}
+      >
         <Outlet />
       </main>
       <Footer />

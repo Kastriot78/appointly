@@ -1588,9 +1588,9 @@ footer.footer--modern {
 }
 
 .footer__input:focus {
-  border-color: #a5b4fc;
-  background: #fff;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  border-color: #a5b4fc !important;
+  background: #fff !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15) !important;
 }
 
 .footer__input--error {
