@@ -1,15 +1,37 @@
 const path = require("path");
 const fs = require("fs");
+const os = require("os");
 const crypto = require("crypto");
 const multer = require("multer");
 
 /** Stored under backend/images/businesses — served at GET /images/businesses/:file */
 const UPLOAD_DIR = path.join(__dirname, "..", "..", "images", "businesses");
+const TMP_UPLOAD_DIR = path.join(os.tmpdir(), "appointly", "images", "businesses");
 
-const storage = multer.diskStorage({
+function isServerlessRuntime() {
+  const cwd = String(process.cwd() || "");
+  return (
+    String(process.env.VERCEL || "").trim() === "1" ||
+    Boolean(process.env.VERCEL_ENV) ||
+    Boolean(process.env.AWS_LAMBDA_FUNCTION_NAME) ||
+    Boolean(process.env.AWS_EXECUTION_ENV) ||
+    Boolean(process.env.LAMBDA_TASK_ROOT) ||
+    cwd.startsWith("/var/task")
+  );
+}
+
+const useServerlessStorage = isServerlessRuntime();
+
+const diskStorage = multer.diskStorage({
   destination(_req, _file, cb) {
-    fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-    cb(null, UPLOAD_DIR);
+    const targetDir = useServerlessStorage ? TMP_UPLOAD_DIR : UPLOAD_DIR;
+    try {
+      fs.mkdirSync(targetDir, { recursive: true });
+      cb(null, targetDir);
+    } catch (err) {
+      err.statusCode = 500;
+      cb(err);
+    }
   },
   filename(_req, file, cb) {
     const ext = path.extname(file.originalname || "").toLowerCase();
@@ -18,6 +40,12 @@ const storage = multer.diskStorage({
     cb(null, `${Date.now()}-${crypto.randomBytes(8).toString("hex")}${safe}`);
   },
 });
+
+/**
+ * Vercel/Lambda filesystem under /var/task is read-only. Use memory storage there
+ * so multipart parsing does not fail and business creation can continue.
+ */
+const storage = useServerlessStorage ? multer.memoryStorage() : diskStorage;
 
 const upload = multer({
   storage,

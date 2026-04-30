@@ -369,10 +369,10 @@ async function createBusiness(req, res) {
   let logoPath = String(body.logo ?? "").trim();
   let coverPath = String(body.cover ?? "").trim();
 
-  if (req.files?.logo?.[0]) {
+  if (req.files?.logo?.[0]?.filename) {
     logoPath = `/images/businesses/${req.files.logo[0].filename}`;
   }
-  if (req.files?.cover?.[0]) {
+  if (req.files?.cover?.[0]?.filename) {
     coverPath = `/images/businesses/${req.files.cover[0].filename}`;
   }
 
