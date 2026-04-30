@@ -123,7 +123,7 @@ app.use("/api/contact", require("./routes/contact.routes"));
 // app.use('/api/admin', require('./routes/admin.routes'));
 
 app.use((req, res) => {
-  res.status(404).json({ message: "Not found" });
+  res.status(404).json({ message: "Backend api..." });
 });
 
 app.use(errorHandler);
